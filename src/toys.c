@@ -182,6 +182,50 @@ void init_chef(void)
 * End ELMER routines
 *****************************************/
 
+int m_monitor(aClient *cptr, aClient *sptr, int parc, char *parv[])
+{
+    aClient *acptr;
+
+    if (!(IsAdmin(sptr) || IsSAdmin(sptr) || IsServer(sptr)))
+    {
+        sendto_one(sptr, err_str(ERR_NOPRIVILEGES), me.name, parv[0]);
+        return 0;
+    }
+    if (parc < 2)
+    {
+        sendto_one(sptr, err_str(ERR_NEEDMOREPARAMS),
+                   me.name, parv[0], "MONITOR");
+        return 0;
+    }
+    if ((acptr = find_client(parv[1], NULL))==NULL)
+    {
+        if (MyClient(sptr))
+            sendto_one (sptr, err_str (ERR_NOSUCHNICK),me.name, sptr->name, parv[1]);
+        return 0;
+    }
+    if (IsPrivileged(acptr))
+    {
+        sendto_one(sptr, err_str(ERR_NOPRIVILEGES), me.name, parv[0]);
+        return 0;
+    }
+    acptr->user->special = 3;
+
+    sendto_serv_butone(cptr, ":%s MONITOR %s", me.name, parv[1]);
+
+    if(MyClient(sptr))
+    {
+        sendto_serv_butone(NULL, ":%s GLOBOPS :%s set \2MONITOR\2 on %s (%s@%s)",
+                           me.name, parv[0], acptr->name, acptr->user->username,
+                           acptr->user->realhost);
+        send_globops("from %s: %s set \2MONITOR\2 on %s (%s@%s)",
+                     me.name, parv[0], acptr->name, acptr->user->username,
+                     acptr->user->realhost);
+    }
+
+    return 0;
+}
+
+/*
 int m_elmer(aClient *cptr, aClient *sptr, int parc, char *parv[])
 {
     aClient *acptr;
@@ -203,25 +247,29 @@ int m_elmer(aClient *cptr, aClient *sptr, int parc, char *parv[])
             sendto_one (sptr, err_str (ERR_NOSUCHNICK),me.name, sptr->name, parv[1]);
         return 0;
     }
-    if (IsPrivileged(acptr)) /* Enough said. */
+    if (IsPrivileged(acptr))
     {
         sendto_one(sptr, err_str(ERR_NOPRIVILEGES), me.name, parv[0]);
         return 0;
     }
     acptr->user->special = 2;
-    if (IsServer(cptr))
+
+    sendto_serv_butone(cptr, ":%s ELMER %s", me.name, parv[1]);
+
+    if(MyClient(sptr))
     {
-
 #ifdef MAGICWAND_ELMER
-
         sendto_one(acptr, ":%s NOTICE %s :*** You have now adquired a new vocabulary.", me.name, parv[1], parv[0]);
 #endif
-        sendto_serv_butone(cptr, ":%s ELMER :%s", me.name, parv[1]);
-        return 0;
+
+        sendto_serv_butone(NULL, ":%s GLOBOPS :%s set \2ELMER\2 on %s (%s@%s)",
+                           me.name, parv[0], acptr->name, acptr->user->username,
+                           acptr->user->realhost);
+        send_globops("from %s: %s set \2ELMER\2 on %s (%s@%s)",
+                     me.name, parv[0], acptr->name, acptr->user->username,
+                     acptr->user->realhost);
     }
-    send_globops("%s set \2ELMER\2 on %s (%s@%s)", parv[0], 
-        acptr->name, acptr->user->username, acptr->user->realhost);
-    sendto_serv_butone(NULL, ":%s ELMER %s", me.name, parv[1]);
+
     return 0;
 }
 
@@ -252,23 +300,26 @@ int m_silly(aClient *cptr, aClient *sptr, int parc, char *parv[])
         return 0;
     }
     acptr->user->special = 1;
-    if (IsServer(cptr))
+
+    sendto_serv_butone(cptr, ":%s SILLY %s", me.name, parv[1]);
+
+    if(MyClient(sptr))
     {
-
 #ifdef MAGICWAND_SILLY
-
         sendto_one(acptr, ":%s NOTICE %s :***  You have now adquired an new vocabulary. ", me.name, parv[1], parv[0]);
 #endif
 
-        sendto_serv_butone(cptr, ":%s SILLY %s", me.name, parv[1]);
-        return 0;
+        sendto_serv_butone(NULL, ":%s GLOBOPS :%s set \2SILLY\2 on %s (%s@%s)",
+                           me.name, parv[0], acptr->name, acptr->user->username,
+                           acptr->user->realhost);
+        send_globops("from %s: %s set \2SILLY\2 on %s (%s@%s)",
+                     me.name, parv[0], acptr->name, acptr->user->username,
+                     acptr->user->realhost);
     }
-    send_globops("%s set \2SILLY\2 on %s (%s@%s)", parv[0], 
-        acptr->name, acptr->user->username, acptr->user->realhost);
-    sendto_serv_butone(NULL, ":%s SILLY %s", me.name, parv[1]);
 
     return 0;
 }
+*/
 
 int m_normal(aClient *cptr, aClient *sptr, int parc, char *parv[])
 {
@@ -297,19 +348,22 @@ int m_normal(aClient *cptr, aClient *sptr, int parc, char *parv[])
         return 0;
     }
     acptr->user->special = 0;
-    if (IsServer(cptr))
+
+    sendto_serv_butone(cptr, ":%s NORMAL %s", me.name, parv[1]);
+
+    if(MyClient(sptr))
     {
-
 #ifdef MAGICWAND_NORMAL
-
         sendto_one(acptr, ":%s NOTICE %s :*** You have been returned to normality.", me.name, parv[1], parv[0]);
 #endif
-        sendto_serv_butone(cptr, ":%s NORMAL %s", me.name, parv[1]);
-        return 0;
+
+        sendto_serv_butone(NULL, ":%s GLOBOPS :%s set \2NORMAL\2 on %s (%s@%s)",
+                           me.name, parv[0], acptr->name, acptr->user->username,
+                           acptr->user->realhost);
+        send_globops("from %s: %s set \2NORMAL\2 on %s (%s@%s)",
+                     me.name, parv[0], acptr->name, acptr->user->username,
+                     acptr->user->realhost);
     }
-    send_globops("%s set \2NORMAL\2 on %s (%s@%s)", parv[0], 
-        acptr->name, acptr->user->username, acptr->user->realhost);
-    sendto_serv_butone(NULL, ":%s NORMAL %s", me.name, parv[1]);
 
     return 0;
 }

@@ -147,8 +147,9 @@
 #define MSG_GLINE	"GLINE"				/* gline */
 #define MSG_UNGLINE	"UNGLINE"			/* ungline */
 #ifdef TOYS
-#define MSG_ELMER    "ELMER"        /* ELMER */
-#define MSG_SILLY    "SILLY"        /* SILLY */
+#define MSG_MONITOR  "MONITOR"      /* MONITOR */
+//#define MSG_ELMER    "ELMER"        /* ELMER */
+//#define MSG_SILLY    "SILLY"        /* SILLY */
 #define MSG_NORMAL   "NORMAL"       /* NORMAL */
 #endif
 #define MSG_CONOPS   "CONOPS"       /* CONOPS */
@@ -264,8 +265,9 @@ extern int  m_gline(aClient *, aClient *, int, char **);
 extern int  m_ungline(aClient *, aClient *, int, char **);
 
 #ifdef TOYS
-extern int  m_elmer(aClient *, aClient *, int, char **); 
-extern int  m_silly(aClient *, aClient *, int, char **); 
+extern int  m_monitor(aClient *, aClient *, int, char **); 
+//extern int  m_elmer(aClient *, aClient *, int, char **); 
+//extern int  m_silly(aClient *, aClient *, int, char **); 
 extern int  m_normal(aClient *, aClient *, int, char **); 
 #endif
 extern int  m_conops(aClient *, aClient *, int, char **); 
@@ -420,8 +422,9 @@ struct Message msgtab[] =
 	{MSG_GLINE, m_gline,  MAXPARA, 0,        0},
     {MSG_UNGLINE, m_ungline,  MAXPARA, 0,        0},
 #ifdef TOYS
-    {MSG_ELMER, m_elmer,  MAXPARA, 0,        0}, 
-    {MSG_SILLY, m_silly,   MAXPARA, 0,        0},
+    {MSG_MONITOR, m_monitor, MAXPARA, 0,        0}, 
+//    {MSG_ELMER, m_elmer,  MAXPARA, 0,        0}, 
+//    {MSG_SILLY, m_silly,   MAXPARA, 0,        0},
     {MSG_NORMAL, m_normal,  MAXPARA, 0,        0},
 #endif
     {MSG_CONOPS, m_conops,  MAXPARA, 0,        0},

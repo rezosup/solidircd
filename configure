@@ -5674,33 +5674,33 @@ _ACEOF
 _ACEOF
 
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 16
+#undef WRITEV_IOV 16
 _ACEOF
 
         ;;
     *-freebsd*)
         freebsd="yes"
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 32
+#undef WRITEV_IOV 32
 _ACEOF
 
         ;;
     *-netbsd*)
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 32
+#undef WRITEV_IOV 32
 _ACEOF
 
         ;;
     *-openbsd*)
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 32
+#undef WRITEV_IOV 32
 _ACEOF
 
         ;;
     *-linux*)
         linux="yes"
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 32
+#undef WRITEV_IOV 32
 _ACEOF
 
         ;;
@@ -5714,7 +5714,7 @@ _ACEOF
     *-darwin*)
         check_hmodules="no"
         cat >>confdefs.h <<_ACEOF
-#define WRITEV_IOV 32
+#undef WRITEV_IOV 32
 _ACEOF
 
         ;;
@@ -8943,9 +8943,9 @@ echo "      Install Directory:              $prefix"
 echo ""
 
 
-ok=0
+ok=1
 DEF=no
-echo "Would you like to create your SSL Certificate now?"
+#echo "Would you like to create your SSL Certificate now?"
 while [ $ok -lt 1 ] ; do
         echo "[$DEF] "
         if read INPUT ; then : ; else echo "" ; exit 1 ; fi
@@ -8971,9 +8971,9 @@ while [ $ok -lt 1 ] ; do
 done
 echo ""
 
-ok=0
+ok=1
 DEF=no
-echo "Would you like to compile & install solid-ircd now?"
+#echo "Would you like to compile & install solid-ircd now?"
 while [ $ok -lt 1 ] ; do
         echo "[$DEF] "
         if read INPUT ; then : ; else echo "" ; exit 1 ; fi

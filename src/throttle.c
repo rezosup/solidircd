@@ -355,6 +355,11 @@ throttle_check(char *host, int fd, time_t sotime)
     if (!throttle_enable)
         return 1; /* always successful */
 
+#ifdef THROTTLE_IGNORE
+    if (!strcmp(host, THROTTLE_IGNORE_IP))
+        return 1;
+#endif
+
     /* If this is an old remote signon, just ignore it */
     if(fd == -1 && (NOW - sotime > throttle_ttime))
        return 1;

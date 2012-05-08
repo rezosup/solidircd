@@ -131,7 +131,7 @@ void init_globals()
     global_ip_limit = DEFAULT_GLOBAL_IP_CLONES;
     global_ip24_limit = DEFAULT_GLOBAL_IP24_CLONES;
 
-	strncpyzt(HostPrefix, Network_Name, sizeof(HostPrefix));
+	strncpyzt(HostPrefix, DEFAULT_HOST_PREFIX, sizeof(HostPrefix));
 	strncpyzt(HostDomain, DEFAULT_HOST_DOMAIN, sizeof(HostDomain));
 	strncpyzt(HiddenServName, HIDDEN_SERVER_NAME, sizeof(HiddenServName));
     strncpyzt(HiddenServDesc, HIDDEN_SERVER_DESC, sizeof(HiddenServDesc));

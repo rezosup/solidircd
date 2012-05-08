@@ -124,7 +124,7 @@ typedef struct SAliasInfo AliasInfo;
 
 /* comply with RFC1123 */
 
-#define	NICKLEN		25	
+#define	NICKLEN		30
 
 /* Necessary to put 9 here instead of 10  if  
  * s_msg.c/m_nick has been corrected.  This 

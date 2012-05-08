@@ -3854,6 +3854,7 @@ m_unsgline(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
 int m_svident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 {
+/*
     aClient *acptr;
 
     if (check_registered(sptr))
@@ -3890,7 +3891,7 @@ int m_svident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
 	sendto_serv_butone(cptr, ":%s SVIDENT %s :%s", sptr->name, acptr->name, parv[2]);
 
-        sendto_one(sptr, ":%s NOTICE %s :*** Notice -- Your Ident is now (%s)", me.name,
+        sendto_one(acptr, ":%s NOTICE %s :*** Notice -- Your Ident is now (%s)", me.name,
         acptr->user->host, parv[2]);
 
 	return 0;
@@ -3900,6 +3901,7 @@ int m_svident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 	sendto_one(sptr, err_str(ERR_NOSUCHNICK), me.name, sptr->name, parv[1]);
 	return 0;
     }
+*/
     return 0;
 }
 
@@ -3913,6 +3915,7 @@ int m_svident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
 int m_setident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 {
+/*
     aClient *acptr;
 
     if (check_registered(sptr))
@@ -3949,7 +3952,7 @@ int m_setident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
 	sendto_serv_butone(cptr, ":%s SVIDENT %s :%s", sptr->name, acptr->name, parv[2]);
 
-        sendto_one(sptr, ":%s NOTICE %s :*** Notice -- Your Ident is now (%s)", me.name,
+        sendto_one(acptr, ":%s NOTICE %s :*** Notice -- Your Ident is now (%s)", me.name,
         acptr->user->host, parv[2]);
 
 	return 0;
@@ -3959,6 +3962,7 @@ int m_setident(aClient *cptr, aClient *sptr, int parc, char *parv[])
 	sendto_one(sptr, err_str(ERR_NOSUCHNICK), me.name, sptr->name, parv[1]);
 	return 0;
     }
+*/
     return 0;
 }
 

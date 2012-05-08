@@ -43,7 +43,7 @@
  * unless they are on the same channel as you.
  */
 
-#define	NO_DEFAULT_INVISIBLE
+#undef	NO_DEFAULT_INVISIBLE
 
 /*
  * USE_SYSLOG - log errors and such to syslog() If you wish to have the
@@ -65,9 +65,9 @@
  * you use syslog above, you may want to turn some (none) of the
  * spurious log messages for KILL,SQUIT,etc off.
  */
-#undef	SYSLOG_KILL		/* log all operator kills */
-#undef	SYSLOG_SQUIT	        /* log all remote squits */
-#undef	SYSLOG_CONNECT	        /* log remote connect messages */
+#define	SYSLOG_KILL		/* log all operator kills */
+#define	SYSLOG_SQUIT	        /* log all remote squits */
+#define	SYSLOG_CONNECT	        /* log remote connect messages */
 #undef	SYSLOG_USERS		/* send userlog stuff to syslog */
 #undef	SYSLOG_OPER		/* log all users who successfully oper */
 #undef  SYSLOG_BLOCK_ALLOCATOR /* debug block allocator */
@@ -83,45 +83,46 @@
 /* Defaults for things in option block of ircd.conf */
 
 /* WGMON notices are sent to users to warn them about the proxy scans. */
-#define DEFAULT_WGMON_URL "http://kline.dal.net/proxy/"
-#define DEFAULT_WGMON_HOST "some.bot.host"
+#define DEFAULT_WGMON_URL  "http://www.rezosup.org/proxy.phtml"
+#define DEFAULT_WGMON_HOST "services.rezosup.net"
 
 /* Hostmasking address */
-#define DEFAULT_STAFF_ADDRESS "staff.solid-ircd.com"
+#define DEFAULT_STAFF_ADDRESS "staff.misconfigured.rezosup.net"
 
 /* Default help channel */
-#define DEFAULT_HELPCHAN "#Help"
+#define DEFAULT_HELPCHAN "#help"
 
 /* Default website */
-#define DEFAULT_WEBSITE "http://www.solid-ircd.com"
+#define DEFAULT_WEBSITE "http://www.rezosup.net"
 
 /* Default AUP */
-#define DEFAULT_AUP "http://www.solid-ircd.com"
+#define DEFAULT_AUP "http://www.rezosup.org/empty.php?page=Charte"
 
 /* Sent to users in 001 and 005 numerics */
-#define DEFAULT_NETWORK "VidGameChat"
+#define DEFAULT_NETWORK "RezoSup"
 
 /* used for services aliases */
-#define DEFAULT_SERVICES_NAME "services.solid-ircd.com"
-#define DEFAULT_STATS_NAME "stats.solid-ircd.com"
+#define DEFAULT_SERVICES_NAME "services.rezosup.net"
+#define DEFAULT_STATS_NAME    "services.rezosup.net"
 
 /* sent to users when they have been klined from the server */
-#define DEFAULT_NKLINE_ADDY "ircops@solid-ircd.com"
-#define DEFAULT_LKLINE_ADDY "ircops@solid-ircd.com"
+#define DEFAULT_NKLINE_ADDY "akill@rezosup.net"
+#define DEFAULT_LKLINE_ADDY "misconfigured@rezosup.net"
 
 /* Sent to users when they encounter mode +R */
-#define DEFAULT_NS_REGISTER_URL "http://docs.dal.net/docs/nsemail.html"
+#define DEFAULT_NS_REGISTER_URL "http://www.rezosup.org/services.phtml"
 
 /* self explanitory */
-#define DEFAULT_MAXCHANNELSPERUSER 10
+#define DEFAULT_MAXCHANNELSPERUSER 20
 
 /* Default difference in time sync between servers before we complain */
 #define DEFAULT_TSMAXDELTA 120
 #define DEFAULT_TSWARNDELTA 15
 
 
-/* Default host domain name */
-#define DEFAULT_HOST_DOMAIN "solid-ircd.com"
+/* Default host prefix and domain name */
+#define DEFAULT_HOST_PREFIX "RZ"
+#define DEFAULT_HOST_DOMAIN "rezosup.net"
 
 /* default clone limits */
 #define DEFAULT_LOCAL_IP_CLONES    10
@@ -130,6 +131,13 @@
 #define DEFAULT_GLOBAL_IP24_CLONES 150
 
 /* 
+ * If you want host name to be auto-spoofed upon connection
+ * define this here, and a password for spoofing check.
+ */
+#undef HOSTNAME_SPOOFING
+#define HOSTNAME_SPOOFING_PWD "evilpassword"
+
+/*
  * STRICT_LIST
  * This function is enabled by default it prevents unregistered
  * users from viewing channels using /list they're notified  to use /qlist instead
@@ -186,7 +194,7 @@
  */
 
 
-#undef PLUS_R_TO_NONREG_WARN
+#define PLUS_R_TO_NONREG_WARN
 
 
 
@@ -195,7 +203,7 @@
  * Define this if you want to hide the location of U:lined servers (and 
  * then clients on them) from nonopers. With this defined, no non-oper 
  * should be able to find out which server the U:lined server is connected
- * to. If you are connected to the main DALnet network, you MUST have this
+ * to. If you are connected to the main RezoSup network, you MUST have this
  * enabled.
  */
 
@@ -216,7 +224,7 @@
  *
  */
 
- #define RESTRICT_C_LINES_ADMINONLY
+#undef RESTRICT_C_LINES_ADMINONLY
 
 /*
  * ERROR_FREEZE_NOTICE
@@ -313,7 +321,7 @@
  * services that are not noquit compliant.
  */
 
-#undef NOQUIT
+#define NOQUIT
 
 /*
  * DEFAULT_KLINE_TIME
@@ -438,7 +446,7 @@
  * remove flood control for opers
  */
 
-#undef NO_OPER_FLOOD
+#define NO_OPER_FLOOD
 
 
 
@@ -579,10 +587,6 @@
  * 2 - Local +A can see the real IP.
  * 3 - Noone can see the real IP.  It is still logged.
  *
- * WARNING:
- * Running levels above 1 on DALnet will result in your server being juped
- * from the network if a security breech is suspected.
- *
  * If level 3 is selected, USE_SYSLOG must be defined.
  */
 
@@ -601,7 +605,7 @@
  * well as the default HelpServ topic request command. -srd
  */
 
-#define HELP_FORWARD_HS
+#undef HELP_FORWARD_HS
 #ifdef HELP_FORWARD_HS
 #define DEF_HELP_CMD "?"
 #endif
@@ -654,16 +658,14 @@
 
 #define NO_USER_SERVERKILLS
 #define NO_USER_OPERKILLS 
-/* #undef NO_USER_STATS */
-
 #define NO_USER_STATS 
 /* #undef NO_LOCAL_USER_STATS */
 #define NO_USER_TRACE 
-/* #undef NO_USER_OPERTARGETED_COMMANDS */
+#define NO_USER_OPERTARGETED_COMMANDS
 /* #undef HIDE_NUMERIC_SOURCE */
- #define HIDE_KILL_ORIGINS 
+/* #undef HIDE_KILL_ORIGINS */
 /* #undef HIDE_SPLIT_SERVERS */
- #define HIDE_SERVERMODE_ORIGINS 
+/* #undef HIDE_SERVERMODE_ORIGINS */
 
 /***********************/
 /* OPER HIDING SECTION */
@@ -720,8 +722,8 @@
  * DO NOT CHANGE ON A SERVER TO SERVER BASIS
  * THESE ARE NETWORK-WIDE!
  */
-#define HIDDEN_SERVER_NAME "*.solid-ircd.com" /*This was moved to the ircd.conf */
-#define HIDDEN_SERVER_DESC "VidGameChat IRC Network" /*This was moved to the ircd.conf */
+#define HIDDEN_SERVER_NAME "irc.hidden.rezosup.net" /*This was moved to the ircd.conf */
+#define HIDDEN_SERVER_DESC "RezoSup IRC Network" /*This was moved to the ircd.conf */
 
 /***************************/
 /* END OPER HIDING SECTION */
@@ -751,7 +753,7 @@
  * disable it! :)
  */
 
-#undef DCCALLOW
+#define DCCALLOW
 
 
 /******************************************************************
@@ -801,7 +803,7 @@
  * NOTE: This *MUST* be greater than 1024 if you plan to run ircd under
  * any other uid than root.
  */
-#define PORTNUM 7000 /* 7000 for DALnet */
+#define PORTNUM 6667 /* 7000 for DALnet */
 
 /*
  * NICKNAMEHISTORYLENGTH - size of WHOWAS array this defines the length
@@ -969,6 +971,13 @@
 #define THROTTLE_TRIGTIME 15
 #define THROTTLE_RECORDTIME 1800
 #define THROTTLE_HASHSIZE 25147
+
+/* THROTTLE_IGNORE - To ignore a specific host in the throttling code */
+#undef THROTTLE_IGNORE
+
+#ifdef THROTTLE_IGNORE
+#define THROTTLE_IGNORE_IP "0.0.0.0"
+#endif
 
 /*
  * Message-throttling support.

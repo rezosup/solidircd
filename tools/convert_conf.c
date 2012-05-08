@@ -1160,18 +1160,18 @@ printconf()
     printf("/* Option Definitions */\n\n");
     printf("options {\n");
     printf("    servtype client;  //  MAKE SURE THIS IS CORRECT\n");
-    printf("    network_kline \"kline@dal.net\";\n");
-    printf("    local_kline \"poorly@configure.server\";\n");
+    printf("    network_kline \"akill@rezosup.net\";\n");
+    printf("    local_kline \"misconfigured@rezosup.net\";\n");
     if(do_tline)
     {
         printf("    wgmonhost \"%s\";\n", ProxyMonHost);
         printf("    wgmonurl \"%s\";\n", ProxyMonURL);
     }
     printf("/********* other options worth reviewing *********/\n");
-    printf("#    maxchannels 10;\n");
+    printf("#    maxchannels 20;\n");
     printf("#    short_motd;\n");
     printf("#    crypt_oper_pass;\n");
-    printf("#    staff_address staff.dalnet;\n");
+    printf("#    staff_address staff.misconfigured.rezosup.net;\n");
     printf("};\n\n");
     printf("/* Class Definitions */\n\n");
     for(class = classes; class; class = class->next)

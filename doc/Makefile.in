@@ -24,7 +24,7 @@ INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
 INSTALL_DIR=@INSTALL_DIR@
 
-FILES=opers.txt reference.conf template.conf elmer.conf rehash
+FILES=opers.txt reference.conf template.conf rehash
 
 all:
 

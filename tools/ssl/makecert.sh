@@ -1,9 +1,9 @@
 #!/bin/sh
 
 if test "$1" = "newcert"; then
-    openssl req -new -x509 -nodes -days 365 -config ssl.cnf -out vgc.pem -keyout vgckey.pem
+    openssl req -new -x509 -nodes -days 365 -config ssl.cnf -out rz.pem -keyout rzkey.pem
     echo ""
-    openssl x509 -subject -dates -issuer -serial -fingerprint -noout -in vgc.pem
+    openssl x509 -subject -dates -issuer -serial -fingerprint -noout -in rz.pem
     echo ""
 else
 

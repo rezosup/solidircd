@@ -300,9 +300,9 @@ static char *replies[] =
     /* 272 RPL_ENDOFSILELIST*/	":%s 272 %s :End of /SILENCE list.",
     /* 273 */	                NULL,
     /* 274 */	                NULL,
-    /* 275 RPL_ISSSL */         ":%s 275 %s %s :is a \2Secure Connection\2 (SSL)",
-    /* 276 RPL_ISRSL */	        ":%s 275 %s %s :is a \2Resolved Connection\2",
-    /* 277 ISNOTRSL*/	        ":%s 275 %s %s :is a \2Unresolved Connection\2",
+    /* 275 RPL_ISSSL */         ":%s 275 %s %s :is using a \2Secure Connection\2 (SSL)",
+    /* 276 RPL_ISRSL */	        ":%s 276 %s %s :is using a \2Resolved Connection\2",
+    /* 277 ISNOTRSL*/	        ":%s 277 %s %s :is using an \2Unresolved Connection\2",
     /* 278 */	                NULL,
     /* 279 */	                NULL,
     /* 280 */	                NULL,	/* In use by Undernet */
@@ -349,7 +349,7 @@ static char *replies[] =
                                 "signon time",
     /* 318 RPL_ENDOFWHOIS */	":%s 318 %s %s :End of /WHOIS list.",
     /* 319 RPL_WHOISCHANNELS */	":%s 319 %s %s :%s",
-    /* 320 RPL_WHOISMODES */	":%s 320 %s %s is using modes [%s]",
+    /* 320 RPL_WHOISMODES */	":%s 320 %s %s :is using modes [%s]",
     /* 321 RPL_LISTSTART */	":%s 321 %s Channel :Users Name",
     /* 322 RPL_LIST */		":%s 322 %s %s %d :%s",
     /* 323 RPL_LISTEND */	":%s 323 %s :End of /LIST",
@@ -550,7 +550,7 @@ static char *replies[] =
     /* 484 */	                NULL,	/* In use by Undernet */
     /* 485 ERR_CHANBANREASON */	":%s 485 %s %s :Cannot join channel (%s)",
     /* 486 ERR_NONONREG */	":%s 486 %s :You must identify to a "
-                                "registered nick to private message %s",
+                                "registered nick to %s %s",
     /* 487 ERR_MSGSERVICES */	":%s 487 %s :Error! \"/msg %s\" is no longer supported. "
                                 "Use \"/msg %s@%s\" or \"/%s\" instead.",
     /* 488 ERR_BANNEDFROMCHAN */	":%s 180 %s %s :Cannot join channel "

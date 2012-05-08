@@ -45,7 +45,7 @@
 extern int errno;
 SSL_CTX *CTX_Server;
 
-#if  defined(__FreeBSD__) 
+#if  defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
 
 void *
 mempcpy (void *to, const void *from, size_t size)

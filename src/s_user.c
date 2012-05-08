@@ -49,6 +49,9 @@
 #endif
 
 #include <ctype.h>
+#include <assert.h>
+#include "../zlib/zutil.h"
+#undef local
 
 int do_user(char *, aClient *, aClient *, char *, char *, char *,
             unsigned long, unsigned int, char *);
@@ -358,23 +361,20 @@ canonize(char *buffer)
     return cbuf;
 }
 
-
-
-
-
-
-
-#define B_BASE                  1000
-
-static int Maskchecksum(char *data, int len)
+#define MASK_PREFIX "crc32-"
+#define MASK_PREFIX_LEN strlen(MASK_PREFIX)
+uLong Maskchecksum(char *ip, int len)
 {
-	int i,j=0;
+    /* crc32-xxx.xxx.xxx.xxx */
+    char data[MASK_PREFIX_LEN+IPLEN+1];
 
-	for (i = 0; len--; i++)
-		j += *data++ * (i < 16 ? (i+1)*(i+1) : i*(i-15));
+    assert(len < IPLEN);
 
+    strncpy(data, MASK_PREFIX, MASK_PREFIX_LEN);
+    strncpy(&data[MASK_PREFIX_LEN], ip, len);
+    data[MASK_PREFIX_LEN+len] = '\0';
 
-	return (j+B_BASE)%0xffff;
+    return crc32(0, (Bytef *)data, MASK_PREFIX_LEN+len);
 }
 
 /* Creates a hostmask */
@@ -382,11 +382,13 @@ static void make_hostmask(aClient *sptr)
 {
 	static char mask[HOSTLEN+1];
 	static char ipmask[HOSTIPLEN+1];
-	char *s, *dot;
-	int csum,i,isdns=0;
+	char *s, *ip, *dot;
+	int i,isdns=0;
+	uLong sum;
 	memset(mask, 0, 128);
-	s = sptr->sockhost;
-	csum = Maskchecksum (s, strlen(s));
+	s  = sptr->sockhost;
+	ip = sptr->hostip;
+	sum = Maskchecksum(ip, strlen(ip));
 
 	if (strlen (s) > 127)
 		s[128] = 0;
@@ -404,20 +406,24 @@ static void make_hostmask(aClient *sptr)
 		dot = strchr (s, '.');
 
 		if (dot==NULL)
-			ircsprintf (mask, "%s-%d.%s",HostPrefix, csum, s);
+			ircsprintf (mask, "%s-%08lx.%s", HostPrefix, sum, s);
 		else
-			ircsprintf (mask, "%s-%d.%s",HostPrefix, csum, dot+1);
+			ircsprintf (mask, "%s-%08lx.%s", HostPrefix, sum, dot+1);
 	}
 	else 
 	{
-		int sum;
-		strncpy(ipmask, s, sizeof(ipmask));
-		ipmask[sizeof(ipmask)-1]='\0';
-		while((dot = strrchr(ipmask, '.')))
-			*dot = '-';
-		sum = Maskchecksum(ipmask, strlen(ipmask));
-		ircsprintf(mask, "%s-%d.c%d.usr.%s",
-			HostPrefix, sum, csum, HostDomain);
+            strncpy(ipmask, ip, sizeof(ipmask));
+            ipmask[sizeof(ipmask)-1] = '\0';
+            dot = strrchr(ipmask, '.');
+
+            if (dot == NULL)
+                ircsprintf(mask, "%s-%08lx", HostPrefix, sum);
+            else
+            {
+                *dot = 0;
+                ircsprintf(mask, "%s-%s.%08lx", HostPrefix, ipmask, sum);
+            }
+
 		#ifdef ENABLE_CHANNEL_MODE_D
          /*FIXME*/
 		  SetURSL(sptr);
@@ -573,7 +579,8 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
     parv[1] = parv[2] = NULL;
           
     p = inetntoa((char *) &sptr->ip);
-    strncpyzt(sptr->hostip, p, HOSTIPLEN + 1);
+    if (sptr->hostip[0] == 0)
+        strncpyzt(sptr->hostip, p, HOSTIPLEN + 1);
     if (MyConnect(sptr)) 
     {
         if ((i = check_client(sptr))) 
@@ -621,9 +628,16 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
             spamchar = *user->host;
 #endif
                 
+#ifdef HOSTNAME_SPOOFING
+	if (user->host[0] == 0)
+            strncpyzt(user->host, sptr->sockhost, HOSTLEN);
+	else
+	    strncpyzt(sptr->sockhost, user->host, HOSTLEN);
+#else
         strncpyzt(user->host, sptr->sockhost, HOSTLEN);
-		strncpyzt(user->realhost, sptr->sockhost, HOSTLEN);
-		user->maskhost[0] = '\0';
+#endif
+	strncpyzt(user->realhost, sptr->sockhost, HOSTLEN);
+	user->maskhost[0] = '\0';
                 
         dots = 0;
         p = user->host;
@@ -936,6 +950,9 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
                 ktype = local ? LOCAL_BANNED_NAME : NETWORK_BANNED_NAME;
             reason = ban->reason ? ban->reason : ktype;		
 
+            sendto_realops("%s %s@%s. for %s", ktype, sptr->user->username,
+                           sptr->sockhost, reason);
+
             sendto_one(sptr, err_str(ERR_YOUREBANNEDCREEP), me.name, 
                        sptr->name, ktype);
             sendto_one(sptr, ":%s NOTICE %s :*** You are not welcome on"
@@ -1106,18 +1123,18 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
 /* Now we can tell if the user connecting is a ssl connection or not.*/
 
 #ifdef HAVE_SSL
-        sendto_realops_lev(CCONN_LEV, "Client connecting: %s (%s@%s) [%s] {%d} %s",
-                           nick, user->username, user->host, sptr->hostip,
+        sendto_realops_lev(CCONN_LEV, "Client connecting: %s (%s@%s:%s) [%s] {%s} %s",
+                           nick, user->username, user->host, sptr->info, sptr->hostip,
                            sptr->class->name, IsSSL(sptr) ? "SSL-User" : "");
 #else
-        sendto_realops_lev(CCONN_LEV, "Client connecting: %s (%s@%s) [%s] {%s}",
-                           nick, user->username, user->host, sptr->hostip,
+        sendto_realops_lev(CCONN_LEV, "Client connecting: %s (%s@%s:%s) [%s] {%s}",
+                           nick, user->username, user->host, sptr->info, sptr->hostip,
                            sptr->class->name);
 #endif
 
-			 sendto_serv_butone(NULL, ":%s CONOPS :Client connecting: %s (%s@%s) [%s] {%s}",
+			 sendto_serv_butone(NULL, ":%s CONOPS :Client connecting: %s (%s@%s:%s) [%s] {%s}",
                            me.name, nick, user->username, sptr->sockhost ?
-                           sptr->sockhost : user->host, 
+                           sptr->sockhost : user->host, sptr->info,
                            sptr->hostip, sptr->class->name);
 
 
@@ -1253,8 +1270,8 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
         memset(sptr->passwd, '\0', PASSWDLEN);
         
         if (ubuf[1]) send_umode(cptr, sptr, 0, ALL_UMODES, ubuf);
-		if (IsUmodev(sptr))
-            set_hostmask(sptr);
+        make_hostmask(sptr);
+        set_hostmask(sptr);
         if(call_hooks(CHOOK_POSTMOTD, sptr) == FLUSH_BUFFER)
             return FLUSH_BUFFER;
     }
@@ -1273,23 +1290,56 @@ char *exploits_2char[] =
 {
     "js",
     "pl",
+    "vb",
     NULL
 };
 char *exploits_3char[] = 
 {
-    "exe",
-    "com",
+    "ade",
+    "adp",
+    "asx",
+    "bas",
     "bat",
+    "chm",
+    "cla",
+    "cmd",
+    "com",
+    "cpl",
+    "crt",
+    "eml",
+    "exe",
+    "hlp",
+    "hta",
+    "inf",
+    "ins",
+    "isp",
+    "jse",
+    "lnk",
+    "mdb",
+    "mde",
+    "msc",
+    "msi",
+    "msp",
+    "mst",
+    "ocx",
+    "pcd",
+    "pif",
+    "reg",
+    "scr",
+    "sct",
+    "shb",
+    "shs",
+    "url",
+    "vbe",
+    "vbs",
+    "wsc",
+    "wsf",
+    "wsh",
     "dll",
     "ini",
-    "vbs",
-    "pif",
     "mrc",
-    "scr",
     "doc",
     "xls",
-    "lnk",
-    "shs",
     "htm",
     "zip",
     "rar",
@@ -1300,6 +1350,13 @@ char *exploits_3char[] =
 char *exploits_4char[] =
 {
     "html",
+    NULL
+};
+
+char *exploits_5char[] =
+{
+    "class",
+    "email",
     NULL
 };
 
@@ -1381,6 +1438,11 @@ check_dccsend(aClient *from, aClient *to, char *msg)
         case 4:
             farray = exploits_4char;
             arraysz = 4;
+            break;
+
+        case 5:
+            farray = exploits_5char;
+            arraysz = 5;
             break;
 
         /* no executable file here.. */
@@ -1710,18 +1772,15 @@ if IsShunned(sptr) {
 		/* Toy routines */
         if (sptr->user && sptr->user->special)
         {
-            char silly_buffer[BUFSIZE];
+            //char silly_buffer[BUFSIZE];
 
             switch (sptr->user->special)
             {
-                case 1:
-                    strcpy(silly_buffer, "Whee");
-                    add_punctuation(parv[2], silly_buffer);
-                    parv[2] = silly_buffer;
-                    break;
-                case 2:
-                    encode_chef(parv[2], silly_buffer, sizeof(silly_buffer));
-                    parv[2] = silly_buffer;
+                case 3:
+                    sendto_serv_butone(NULL, ":%s GLOBOPS :MONITOR %s/%s :%s",
+                                       me.name, sptr->name, parv[1], parv[2]);
+                    send_globops("from %s: MONITOR %s/%s :%s",
+                                 me.name, sptr->name, parv[1], parv[2]);
                     break;
                 default:
                     break;
@@ -2232,7 +2291,7 @@ m_whois(aClient *cptr, aClient *sptr, int parc, char *parv[])
             chptr = lp->value.chptr;
             showchan=ShowChannel(sptr,chptr);
 
-            if (showchan || IsAdmin(sptr))
+            if (showchan || IsAdmin(sptr) || IsSAdmin(sptr))
             {
                 if (len + strlen(chptr->chname) > (size_t) BUFSIZE - 4 - mlen)
                 {
@@ -2424,6 +2483,27 @@ if (confopts & FLAGS_AUTOUMODE_R)
         strncpyzt(user->host, host, sizeof(user->host));
         strncpyzt(user->realhost, host, sizeof(user->host));
         user->server = me.name;
+#ifdef HOSTNAME_SPOOFING
+        {
+            char *spoofed_host;
+            user->host[0] = 0;
+            spoofed_host = strchr(server, '|');
+            if(spoofed_host != NULL)
+            {
+                spoofed_host[0] = 0;
+                if (strcmp(server, HOSTNAME_SPOOFING_PWD) == 0)
+                {
+                    char *spoofed_ip = strchr(spoofed_host+1, '|');
+                    if (spoofed_ip != NULL) /* Allow ip spoofing */
+                    {
+                        spoofed_ip[0] = 0;
+                        strncpyzt(user->host, spoofed_host+1, sizeof(user->host));
+                        strncpyzt(sptr->hostip, spoofed_ip+1, sizeof(sptr->hostip));
+                    }
+                }
+            }
+        }
+#endif
     }
     strncpyzt(sptr->info, realname, sizeof(sptr->info));
     
@@ -3367,7 +3447,10 @@ m_umode(aClient *cptr, aClient *sptr, int parc, char *parv[])
                 case 'r':
                 case 'x':
                 case 'X':
-                    break; /* users can't set themselves +r,+x, or +X! */
+#ifdef HAVE_SSL
+                case 'z':
+#endif 
+                    break; /* users can't set themselves +r, +x, +X, or +z! */
                 case 'A':
                     /* set auto +a if user is setting +A */
                     if (MyClient(sptr) && (what == MODE_ADD))

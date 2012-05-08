@@ -33,7 +33,7 @@
 #define MINOR 4
 #define PATCH 8
 
-#define PATCHES "stable"
+#define PATCHES "stable+rz2e-cho7"
 
 void build_version(void);
 

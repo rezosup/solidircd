@@ -109,27 +109,19 @@ msg_has_ctrls(char *msg)
 
     for (c = (unsigned char *) msg; *c; c++)
     {
-        /* not a control code */
-        if (*c > 31)
-            continue;
-
-        /* ctcp */
-        if (*c == 1)
-            continue;
+        /* Color, sound, plain, reverse */
+        if ((*c == '\x03') || (*c == '\x07') || (*c == '\x0F') || (*c == '\x16'))
+            break;
 
         /* escape */
-        if (*c == 27)
+        if (*c == '\x1B')
         {
             /* ISO 2022 charset shift sequence */
             if (c[1] == '$' || c[1] == '(')
-            {
                 c++;
+            else
                 continue;
-            }
         }
-
-        /* control code */
-        break;
     }
     if(*c)
         return 1;
@@ -496,8 +488,10 @@ static int is_banned(aClient *cptr, aChannel *chptr, chanMember *cm)
 #ifdef EXEMPT_LISTS
     aBanExempt *exempt;
 #endif
-    char        s[NICKLEN + USERLEN + HOSTLEN + 6];
-    char       *s2;
+    char        s1[NICKLEN + USERLEN + HOSTLEN + 6];
+    char        s2[NICKLEN + USERLEN + HOSTLEN + 6];
+    char        s3[NICKLEN + USERLEN + HOSTLEN + 6];
+    char       *s4;
     
     if (!IsPerson(cptr))
         return 0;
@@ -511,20 +505,27 @@ static int is_banned(aClient *cptr, aChannel *chptr, chanMember *cm)
         cm->flags &= ~CHFL_BANNED;
     }
 
-    strcpy(s, make_nick_user_host(cptr->name, cptr->user->username,
-                                  cptr->user->host));
-    s2 = make_nick_user_host(cptr->name, cptr->user->username,
-                             cptr->hostip);
+    strcpy(s1, make_nick_user_host(cptr->name, cptr->user->username,
+                                   cptr->user->host));
+    strcpy(s2, make_nick_user_host(cptr->name, cptr->user->username,
+                                   cptr->hostip));
+    strcpy(s3, make_nick_user_host(cptr->name, cptr->user->username,
+                                   cptr->user->realhost));
+    s4 =       make_nick_user_host(cptr->name, cptr->user->username,
+                                   cptr->user->maskhost);
 
 #ifdef EXEMPT_LISTS
     for (exempt = chptr->banexempt_list; exempt; exempt = exempt->next)
-        if (!match(exempt->banstr, s) || !match(exempt->banstr, s2))
+        if (!match(exempt->banstr, s1) || !match(exempt->banstr, s2) ||
+            !match(exempt->banstr, s3) || !match(exempt->banstr, s4))
             return 0;
 #endif
 
     for (ban = chptr->banlist; ban; ban = ban->next)
-        if ((match(ban->banstr, s) == 0) ||
-            (match(ban->banstr, s2) == 0))
+        if ((match(ban->banstr, s1) == 0) ||
+            (match(ban->banstr, s2) == 0) ||
+            (match(ban->banstr, s3) == 0) ||
+            (match(ban->banstr, s4) == 0))
             break;
 
     if (ban)
@@ -543,26 +544,38 @@ aBan *nick_is_banned(aChannel *chptr, char *nick, aClient *cptr)
 #ifdef EXEMPT_LISTS
     aBanExempt *exempt;
 #endif
-    char *s, s2[NICKLEN+USERLEN+HOSTLEN+6];
+    char  s1[NICKLEN+USERLEN+HOSTLEN+6];
+    char  s2[NICKLEN+USERLEN+HOSTLEN+6];
+    char  s3[NICKLEN+USERLEN+HOSTLEN+6];
+    char *s4;
     
     if (!IsPerson(cptr)) return NULL;
     
-    strcpy(s2, make_nick_user_host(nick, cptr->user->username,
+    strcpy(s1, make_nick_user_host(nick, cptr->user->username,
                                    cptr->user->host));
-    s = make_nick_user_host(nick, cptr->user->username, cptr->hostip);
+    strcpy(s2, make_nick_user_host(nick, cptr->user->username,
+                                   cptr->hostip));
+    strcpy(s3, make_nick_user_host(nick, cptr->user->username,
+                                   cptr->user->realhost));
+    s4 =       make_nick_user_host(nick, cptr->user->username,
+                                   cptr->user->maskhost);
 
 #ifdef EXEMPT_LISTS
     for (exempt = chptr->banexempt_list; exempt; exempt = exempt->next)
         if (exempt->type == MTYP_FULL &&
-            ((match(exempt->banstr, s2) == 0) ||
-             (match(exempt->banstr, s) == 0)))
+            ((match(exempt->banstr, s1) == 0) ||
+             (match(exempt->banstr, s2) == 0) ||
+             (match(exempt->banstr, s3) == 0) ||
+             (match(exempt->banstr, s4) == 0)))
             return NULL;
 #endif
 
     for (ban = chptr->banlist; ban; ban = ban->next)
         if (ban->type == MTYP_FULL &&        /* only check applicable bans */
-            ((match(ban->banstr, s2) == 0) ||    /* check host before IP */
-             (match(ban->banstr, s) == 0)))
+            ((match(ban->banstr, s1) == 0) ||    /* check host before IP */
+             (match(ban->banstr, s2) == 0) ||
+             (match(ban->banstr, s3) == 0) ||
+             (match(ban->banstr, s4) == 0)))
             break;
     return (ban);
 }
@@ -1362,6 +1375,7 @@ void send_channel_modes(aClient *cptr, aChannel *chptr)
 
 
 /* This opermode function needs a rewrite -Sheik 17/05/2005 */
+/*
 static void do_opermode(aChannel *chptr, aClient *sptr, int i)
 {
     static int sent = 0;
@@ -1375,15 +1389,18 @@ static void do_opermode(aChannel *chptr, aClient *sptr, int i)
     else
         sent = 0;
 }
+*/
 
 
 int check_level(int level, int rlevel, aChannel *chptr, aClient *sptr)
 {
-    if (level < rlevel && !IsSAdmin(sptr))
+    if (level < rlevel && !IsServer(sptr))
         return 1;
 
-    else if (MyClient(sptr) && (level < rlevel) && IsSAdmin(sptr))
-        do_opermode(chptr,sptr,0);
+    /*
+     * else if (MyClient(sptr) && (level < rlevel) && IsSAdmin(sptr))
+     *     do_opermode(chptr,sptr,0);
+     */
 
     return 0;
 }
@@ -1416,7 +1433,7 @@ int m_mode(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
    if (IsULine(sptr) && !MyClient(sptr))
 	        chanop=4; /* extra speshul access */
-	else if (IsSAdmin(sptr) && !is_chan_op(sptr, chptr) && !is_halfop(sptr,chptr) && !IsULine(sptr))
+	else if (IsSAdmin(sptr) && !is_chan_op(sptr, chptr) && !is_halfop(sptr,chptr) && !IsULine(sptr) && !MyClient(sptr))
 		chanop=3;
 	else if (is_chan_op(sptr, chptr) || (IsServer(sptr) && chptr->channelts!=0))
 		chanop=2;
@@ -2438,7 +2455,7 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
 }
 
 /* This function allows Admins & IRCops to  walk bans etc... -Sheik 04/14/03 */
-
+/*
 static int can_walk(aClient *sptr, aChannel *chptr) {
 	if (IsSAdmin(sptr)) {
 		*modebuf = *parabuf = '\0';
@@ -2450,6 +2467,7 @@ static int can_walk(aClient *sptr, aChannel *chptr) {
 	}
 	return 0;
 }
+*/
 
 static int can_join(aClient *sptr, aChannel *chptr, char *key)
 {
@@ -2514,9 +2532,10 @@ if (chptr->mode.mode & MODE_RSL && IsURSL(sptr))
     if (!error && is_banned(sptr, chptr, NULL))
         error = ERR_BANNEDFROMCHAN;
 
-if (error && can_walk(sptr, chptr))
-		error = 0;
-
+    /*
+     * if (error && can_walk(sptr, chptr))
+     *     error = 0;
+     */
 
     if (error)
     {
@@ -3747,7 +3766,7 @@ void send_list(aClient *cptr, int numsend)
             for (chptr = (aChannel *)hash_get_chan_bucket(hashnum); 
                  chptr; chptr = chptr->hnextch)
             {
-                if (SecretChannel(chptr) && !IsAnOper(cptr)
+                if (SecretChannel(chptr) && !(IsAdmin(cptr) || IsSAdmin(cptr))
                     && !IsMember(cptr, chptr))
                     continue;
 #ifdef USE_CHANMODE_L
@@ -3776,7 +3795,7 @@ void send_list(aClient *cptr, int numsend)
                 /* Seem'd more efficent to seperate into two commands 
                  * then adding an or to the inline. -- Doc.
                  */
-                if (IsAnOper(cptr))
+                if (IsAdmin(cptr) || IsSAdmin(cptr))
                 {
                     *modebuf = *parabuf = '\0';
                     modebuf[1] = '\0';

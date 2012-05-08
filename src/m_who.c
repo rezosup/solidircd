@@ -550,8 +550,10 @@ int chk_who(aClient *ac, int showall)
 	    return 0;
     
     if(wsopts.host!=NULL)
-	if((wsopts.host_plus && hchkfn(wsopts.host, ac->user->host)) ||
-	   (!wsopts.host_plus && !hchkfn(wsopts.host, ac->user->host)))
+        if (( wsopts.host_plus && (hchkfn(wsopts.host, ac->user->host) &&
+                                   hchkfn(wsopts.host, ac->user->realhost))) ||
+            (!wsopts.host_plus && !(hchkfn(wsopts.host, ac->user->host) &&
+                                    hchkfn(wsopts.host, ac->user->realhost))))
 	    return 0;
 
     if(wsopts.cidr4_plus)
@@ -672,7 +674,7 @@ int m_who(aClient *cptr, aClient *sptr, int parc, char *parv[])
     {
 	if(IsMember(sptr,wsopts.channel))
 	    showall=1;
-	else if(SecretChannel(wsopts.channel) && IsAdmin(sptr))
+	else if(SecretChannel(wsopts.channel) && (IsAdmin(sptr) || IsSAdmin(sptr)))
 	    showall=1;
 	else if(!SecretChannel(wsopts.channel) && IsAnOper(sptr))
 	    showall=1;
@@ -701,7 +703,8 @@ int m_who(aClient *cptr, aClient *sptr, int parc, char *parv[])
 		status[++i]=0;
 		sendto_one(sptr, getreply(RPL_WHOREPLY), me.name, sptr->name,
 			   wsopts.channel->chname, ac->user->username,
-			   WHO_HOST(ac), WHO_SERVER(sptr, ac), ac->name, status,
+			   IsAnOper(sptr) ? WHO_REALHOST(ac) : WHO_HOST(ac),
+                	   WHO_SERVER(sptr, ac), ac->name, status,
 			   WHO_HOPCOUNT(sptr, ac),
 			   ac->info);
 	    }
