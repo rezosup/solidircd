@@ -10,13 +10,6 @@
 ## --------------------- ##
 
 ###########################################################################
-if [ ! "$NO_INTRO" ] ; then
-        clear
-        more BANNER
-        echo ""
-else
-        echo ""
-fi
 
 echo "Beginning solid-ircd configuration."
 echo ""

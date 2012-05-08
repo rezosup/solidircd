@@ -45,11 +45,6 @@ build:
 		echo "Building $$i";\
 		(${MAKE} -C $$i build || die "Error building $$i" );\
 	done
-	@echo "******************************************************************************"
-	@echo "* For help with solid-ircd, please refer to http://solid-ircd.com            *"
-	@echo "* If you wan to come to our dev channel which you're more than welcome to.   *"
-	@echo "* its irc.vidgamechat.net #Solid                                             *"
-	@echo "******************************************************************************"
 
 profile:
 	@for i in $(SUBDIRS); do \
