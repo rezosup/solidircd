@@ -3,7 +3,7 @@ Solidircd-rz
 
 Solidircd is the current ircd used by the `Rezosup <http://www.rezosup.org>`_ IRC server.
 
-The current version is solidircd-3.4.8 + patches. It is itself a fork of bahamu-1.8.4.
+The current version is solidircd-3.4.8 + patches. Solid-ircd is itself a fork of bahamut-1.8.4.
 
 
 Installation
