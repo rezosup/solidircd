@@ -119,7 +119,7 @@ static inline void entropy_error(void)
            RAND_SRC, strerror(errno));
     printf("ircd needs a %d byte random seed.\n", RAND_BYTES);
     printf("You can place a file containing random data called"
-           " .ircd.entropy\nin the directory with your ircd.conf."
+           " .ircd.entropy\nin the " RUN_PATH " directory."
            " This file must be at least %d bytes\n", RAND_BYTES);
     printf("long and should be suitably random.\n");
 }
@@ -173,10 +173,10 @@ static int make_entropy()
     printf("Done.\n");
     fclose(fp);
 
-    fp = fopen(".ircd.entropy", "w");
+    fp = fopen(RUN_PATH"/.ircd.entropy", "w");
     if(!fp)
     {
-        printf("Could not open .ircd.entropy for writing: %s\n", 
+        printf("Could not open "RUN_PATH"/.ircd.entropy for writing: %s\n", 
                 strerror(errno));
         return 0;
     }
@@ -184,7 +184,7 @@ static int make_entropy()
     fwrite(randbuf, RAND_BYTES * 4, 1, fp);
     fclose(fp);
 
-    RAND_load_file(".ircd.entropy", -1);
+    RAND_load_file(RUN_PATH"/.ircd.entropy", -1);
 
     return 1;
 }
@@ -194,7 +194,7 @@ static int init_random()
     int ret;
     time_t now;
 
-    ret = RAND_load_file(".ircd.entropy", -1);
+    ret = RAND_load_file(RUN_PATH"/.ircd.entropy", -1);
     if(ret <= 0)
     {
         if(!make_entropy())
@@ -208,7 +208,7 @@ static int init_random()
     /* this is probably not too good, but it saves just writing
        the whole state back to disk with no changes. */
     RAND_seed(&now, 4); 
-    RAND_write_file(".ircd.entropy");
+    RAND_write_file(RUN_PATH"/.ircd.entropy");
 
     return 0;
 }

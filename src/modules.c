@@ -211,7 +211,7 @@ load_module(aClient *sptr, char *modname)
     if(modules && modules->module_path)
         ircsnprintf(mnamebuf, 512, "%s/%s.so", modules->module_path, modname);
     else
-        ircsnprintf(mnamebuf, 512, "%s/modules/%s.so", dpath, modname);
+        ircsnprintf(mnamebuf, 512, LIB_PATH"/modules/%s.so", modname);
 
     tmpmod.handle = dlopen(mnamebuf, RTLD_NOW);
     if(tmpmod.handle == NULL)

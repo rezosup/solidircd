@@ -1670,10 +1670,19 @@ int confadd_ssl(cVar *vars[], int lnum)
     {
         if (tmp->type && (tmp->type->flag & SSTF_CERTIFICATE)) {
             tmp->type = NULL;
-            strncpyzt(SSL_Certificate, tmp->value, sizeof(SSL_Certificate));
+			if(strncmp("/", tmp->value, 1) == 0) {
+				// Absolute path
+				strncpyzt(SSL_Certificate, tmp->value, sizeof(SSL_Certificate));
+			} else {
+				snprintf(SSL_Certificate, sizeof(SSL_Certificate), "%s/%s", CONFIG_PATH, tmp->value);
+			}
         } else if (tmp->type && (tmp->type->flag & SSTF_KEYFILE)) {
             tmp->type = NULL;
-            strncpyzt(SSL_Keyfile, tmp->value, sizeof(SSL_Keyfile));
+			if (strncmp("/", tmp->value, 1) == 0) {
+	            strncpyzt(SSL_Keyfile, tmp->value, sizeof(SSL_Keyfile));
+			} else {
+				snprintf(SSL_Keyfile, sizeof(SSL_Keyfile), "%s/%s", CONFIG_PATH, tmp->value);
+			}
         } else if (tmp->type && (tmp->type->flag & SSTF_UMODEZ)) {
             tmp->type = NULL;
             new_confopts |= FLAGS_LETUMODE_z;

@@ -200,7 +200,7 @@ void s_die()
 #ifdef  USE_SYSLOG
     (void) syslog(LOG_CRIT, "Server killed By SIGTERM");
 #endif
-    ircsprintf(tmp, "%s/.maxclients", dpath);
+    ircsprintf(tmp, RUN_PATH"/.maxclients");
     fp=fopen(tmp, "w");
     if(fp!=NULL) 
     {
@@ -788,14 +788,16 @@ main(int argc, char *argv[])
 
     get_paths(myargv[0]);
 
-    if(chdir(dpath))
+
+    if(chdir(RUN_PATH))
     {
-        printf("Error changing directory to ircd.conf location\n");
+        printf("Error changing directory to running dir\n");
         printf("Server not started\n");
         exit(0);
     }
 
-    ircsprintf(tmp, "%s/.maxclients", dpath);
+
+    ircsprintf(tmp, RUN_PATH"/.maxclients");
     mcsfp = fopen(tmp, "r");
     if(mcsfp != NULL)
     {
@@ -951,7 +953,7 @@ main(int argc, char *argv[])
 
 
 #ifdef DUMP_DEBUG
-    dumpfp=fopen("dump.log", "w");
+    dumpfp=fopen(LOG_PATH"/ircd-dump.log", "w");
 #endif
 #ifdef USE_SYSLOG
     syslog(LOG_NOTICE, "Server Ready");
