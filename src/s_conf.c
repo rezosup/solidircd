@@ -614,7 +614,7 @@ confadd_oper(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_NAME))
+        if(tmp->type && (tmp->type->flag == SCONFF_NAME))
         {
             if(x->nick)
             {
@@ -625,7 +625,7 @@ confadd_oper(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->nick, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_HOST))
+        else if(tmp->type && (tmp->type->flag == SCONFF_HOST))
         {
             if((hc+1) > MAXHOSTS)
             {
@@ -647,7 +647,7 @@ confadd_oper(cVar *vars[], int lnum)
                 DupString(x->hosts[hc], tmp->value);
             hc++;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PASSWD))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PASSWD))
         {
             if(x->passwd)
             {
@@ -658,7 +658,7 @@ confadd_oper(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->passwd, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_ACCESS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_ACCESS))
         {
             if(x->flags > 0)
             {
@@ -676,7 +676,7 @@ confadd_oper(cVar *vars[], int lnum)
                     }
             }
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_CLASS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_CLASS))
         {
             if(x->class_name)
             {
@@ -735,7 +735,7 @@ confadd_connect(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_NAME))
+        if(tmp->type && (tmp->type->flag == SCONFF_NAME))
         {
             if(x->name)
             {
@@ -746,7 +746,7 @@ confadd_connect(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->name, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_HOST))
+        else if(tmp->type && (tmp->type->flag == SCONFF_HOST))
         {
             if(x->host)
             {
@@ -767,7 +767,7 @@ confadd_connect(cVar *vars[], int lnum)
             else
                 DupString(x->host, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_APASSWD))
+        else if(tmp->type && (tmp->type->flag == SCONFF_APASSWD))
         {
             if(x->apasswd)
             {
@@ -778,7 +778,7 @@ confadd_connect(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->apasswd, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_CPASSWD))
+        else if(tmp->type && (tmp->type->flag == SCONFF_CPASSWD))
         {
             if(x->cpasswd)
             {
@@ -789,7 +789,7 @@ confadd_connect(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->cpasswd, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_FLAGS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_FLAGS))
         {
             if(x->flags > 0)
             {
@@ -809,7 +809,7 @@ confadd_connect(cVar *vars[], int lnum)
                 }
             }
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PORT))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PORT))
         {
             if(x->port > 0)
             {
@@ -820,7 +820,7 @@ confadd_connect(cVar *vars[], int lnum)
             tmp->type = NULL;
             x->port = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_BIND))
+        else if(tmp->type && (tmp->type->flag == SCONFF_BIND))
         {
             if(x->source)
             {
@@ -831,7 +831,7 @@ confadd_connect(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->source, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_CLASS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_CLASS))
         {
             if(x->class_name)
             {
@@ -886,44 +886,44 @@ confadd_options(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & OPTF_NETNAME))
+        if(tmp->type && (tmp->type->flag == OPTF_NETNAME))
         {
             tmp->type = NULL;
             strncpyzt(Network_Name, tmp->value, sizeof(Network_Name));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SERVNAME))
+        else if(tmp->type && (tmp->type->flag == OPTF_SERVNAME))
         {
             tmp->type = NULL;
             strncpyzt(Services_Name, tmp->value, sizeof(Services_Name));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_STATSNAME))
+        else if(tmp->type && (tmp->type->flag == OPTF_STATSNAME))
         {
             tmp->type = NULL;
             strncpyzt(Stats_Name, tmp->value, sizeof(Stats_Name));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_WGMONHOST))
+        else if(tmp->type && (tmp->type->flag == OPTF_WGMONHOST))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_WGMONHOST;
             strncpyzt(ProxyMonHost, tmp->value, sizeof(ProxyMonHost));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_WGMONURL))
+        else if(tmp->type && (tmp->type->flag == OPTF_WGMONURL))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_WGMONURL;
             strncpyzt(ProxyMonURL, tmp->value, sizeof(ProxyMonURL));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_NSREGURL))
+        else if(tmp->type && (tmp->type->flag == OPTF_NSREGURL))
         {
             tmp->type = NULL;
             strncpyzt(NS_Register_URL, tmp->value, sizeof(NS_Register_URL));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_MAXCHAN))
+        else if(tmp->type && (tmp->type->flag == OPTF_MAXCHAN))
         {
             tmp->type = NULL;
             maxchannelsperuser = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SERVTYPE))
+        else if(tmp->type && (tmp->type->flag == OPTF_SERVTYPE))
         {
             tmp->type = NULL;
             if(!mycmp("HUB", tmp->value))
@@ -944,24 +944,24 @@ confadd_options(cVar *vars[], int lnum)
                 return -1;
             }
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_NKLINEADDY))
+        else if(tmp->type && (tmp->type->flag == OPTF_NKLINEADDY))
         {
             tmp->type = NULL;
             strncpyzt(Network_Kline_Address, tmp->value,
                                     sizeof(Network_Kline_Address));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_LKLINEADDY))
+        else if(tmp->type && (tmp->type->flag == OPTF_LKLINEADDY))
         {
             tmp->type = NULL;
             strncpyzt(Local_Kline_Address, tmp->value,
                                     sizeof(Local_Kline_Address));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_STAFFADDY))
+        else if(tmp->type && (tmp->type->flag == OPTF_STAFFADDY))
         {
             tmp->type = NULL;
             strncpyzt(Staff_Address, tmp->value, sizeof(Staff_Address));
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_LCLONES))
+        else if(tmp->type && (tmp->type->flag == OPTF_LCLONES))
         {
             tmp->type = NULL;
             local_ip_limit = strtol(tmp->value, &s, 10);
@@ -972,7 +972,7 @@ confadd_options(cVar *vars[], int lnum)
             if (local_ip24_limit < 1)
                 local_ip24_limit = DEFAULT_LOCAL_IP24_CLONES;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_GCLONES))
+        else if(tmp->type && (tmp->type->flag == OPTF_GCLONES))
         {
             tmp->type = NULL;
             global_ip_limit = strtol(tmp->value, &s, 10);
@@ -983,95 +983,95 @@ confadd_options(cVar *vars[], int lnum)
             if (global_ip24_limit < 1)
                 global_ip24_limit = DEFAULT_GLOBAL_IP24_CLONES;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SMOTD))
+        else if(tmp->type && (tmp->type->flag == OPTF_SMOTD))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_SMOTD;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SMOTD))
+        else if(tmp->type && (tmp->type->flag == OPTF_SMOTD))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_SMOTD;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_CRYPTPASS))
+        else if(tmp->type && (tmp->type->flag == OPTF_CRYPTPASS))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_CRYPTPASS;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SHOWLINKS))
+        else if(tmp->type && (tmp->type->flag == OPTF_SHOWLINKS))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_SHOWLINKS;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_SPLITOPOK))
+        else if(tmp->type && (tmp->type->flag == OPTF_SPLITOPOK))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_SPLITOPOK;
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_TSMAXDELTA))
+        else if(tmp->type && (tmp->type->flag == OPTF_TSMAXDELTA))
         {
             tmp->type = NULL;
             tsmaxdelta = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_TSWARNDELTA))
+        else if(tmp->type && (tmp->type->flag == OPTF_TSWARNDELTA))
         {
             tmp->type = NULL;
             tswarndelta = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & OPTF_RQUIT))
+        else if(tmp->type && (tmp->type->flag == OPTF_RQUIT))
         {
             tmp->type = NULL;
             new_confopts |= FLAGS_RQUIT;
         }
-		else if(tmp->type && (tmp->type->flag & OPTF_HOSTPREFIX))
+		else if(tmp->type && (tmp->type->flag == OPTF_HOSTPREFIX))
 		{
 			tmp->type = NULL;
 			strncpyzt(HostPrefix, tmp->value,
 				sizeof(HostPrefix));
 		}
-		else if(tmp->type && (tmp->type->flag & OPTF_DOMAIN))
+		else if(tmp->type && (tmp->type->flag == OPTF_DOMAIN))
 		{
 			tmp->type = NULL;
 			strncpyzt(HostDomain, tmp->value,
 				sizeof(HostDomain));
 		}
 
-		else if(tmp->type && (tmp->type->flag & OPTF_AUTOUMODEV))
+		else if(tmp->type && (tmp->type->flag == OPTF_AUTOUMODEV))
 		{
 			tmp->type = NULL;
 			new_confopts |= FLAGS_AUTOUMODE_v;
 		}
-		else if(tmp->type && (tmp->type->flag & OPTF_AUTOUMODER))
+		else if(tmp->type && (tmp->type->flag == OPTF_AUTOUMODER))
 		{
 			tmp->type = NULL;
 			new_confopts |= FLAGS_AUTOUMODE_R;
 		}
-		else if (tmp->type && (tmp->type->flag & OPTF_HIDDENSERVNAME))
+		else if (tmp->type && (tmp->type->flag == OPTF_HIDDENSERVNAME))
         {
             tmp->type = NULL;
             strncpyzt(HiddenServName, tmp->value, sizeof(HiddenServName));
         }
-        else if (tmp->type && (tmp->type->flag & OPTF_HIDDENSERVDESC))
+        else if (tmp->type && (tmp->type->flag == OPTF_HIDDENSERVDESC))
         {
             tmp->type = NULL;
             strncpyzt(HiddenServDesc, tmp->value, sizeof(HiddenServDesc));
         }
-		 else if(tmp->type && (tmp->type->flag & OPTF_BOTCLASS))
+		 else if(tmp->type && (tmp->type->flag == OPTF_BOTCLASS))
 	  	  	{
  	  	  	tmp->type = NULL;
 	  	  	DupString(bot_class, tmp->value);
 	     }
-		  else if (tmp->type && (tmp->type->flag & OPTF_HELPCHAN))
+		  else if (tmp->type && (tmp->type->flag == OPTF_HELPCHAN))
         {
             tmp->type = NULL;
             strncpyzt(HELPCHAN, tmp->value, sizeof(HELPCHAN));
         }
-		  else if (tmp->type && (tmp->type->flag & OPTF_WEBSITE))
+		  else if (tmp->type && (tmp->type->flag == OPTF_WEBSITE))
         {
             tmp->type = NULL;
             strncpyzt(WEBSITE, tmp->value, sizeof(WEBSITE));
         }
-		  else if (tmp->type && (tmp->type->flag & OPTF_AUP))
+		  else if (tmp->type && (tmp->type->flag == OPTF_AUP))
         {
             tmp->type = NULL;
             strncpyzt(AUP, tmp->value, sizeof(AUP));
@@ -1096,7 +1096,7 @@ confadd_allow(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_IPMASK))
+        if(tmp->type && (tmp->type->flag == SCONFF_IPMASK))
         {
             if(x->ipmask)
             {
@@ -1110,7 +1110,7 @@ confadd_allow(cVar *vars[], int lnum)
                 x->flags |= CONF_FLAGS_I_HOST_HAS_AT;
             x->flags |= CONF_FLAGS_I_MATCH_HOST;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_HOST))
+        else if(tmp->type && (tmp->type->flag == SCONFF_HOST))
         {
             if(x->hostmask)
             {
@@ -1124,7 +1124,7 @@ confadd_allow(cVar *vars[], int lnum)
                 x->flags |= CONF_FLAGS_I_NAME_HAS_AT;
             x->flags |= CONF_FLAGS_I_MATCH_NAME;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PASSWD))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PASSWD))
         {
             if(x->passwd)
             {
@@ -1151,7 +1151,7 @@ confadd_allow(cVar *vars[], int lnum)
             }
 #endif
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PORT))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PORT))
         {
             if(x->port > 0)
             {
@@ -1162,7 +1162,7 @@ confadd_allow(cVar *vars[], int lnum)
             tmp->type = NULL;
             x->port = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_CLASS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_CLASS))
         {
             if(x->class_name)
             {
@@ -1173,7 +1173,7 @@ confadd_allow(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->class_name, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_FLAGS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_FLAGS))
         {
             char *s = tmp->value;
 
@@ -1218,7 +1218,7 @@ confadd_port(cVar *vars[], int lnum)
     x = make_port();
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_IPMASK))
+        if(tmp->type && (tmp->type->flag == SCONFF_IPMASK))
         {
             if(x->allow)
             {
@@ -1229,7 +1229,7 @@ confadd_port(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->allow, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_BIND))
+        else if(tmp->type && (tmp->type->flag == SCONFF_BIND))
         {
             if(x->address)
             {
@@ -1240,7 +1240,7 @@ confadd_port(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->address, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PORT))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PORT))
         {
             if(x->port > 0)
             {
@@ -1253,7 +1253,7 @@ confadd_port(cVar *vars[], int lnum)
         }
 
 #ifdef HAVE_SSL
-        else if(tmp->type && (tmp->type->flag & SCONFF_TYPE))
+        else if(tmp->type && (tmp->type->flag == SCONFF_TYPE))
         {
 
             x->ptype = NULL;
@@ -1299,7 +1299,7 @@ confadd_global(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_NAME))
+        if(tmp->type && (tmp->type->flag == SCONFF_NAME))
         {
             unsigned char *s;
             int valid = 0;
@@ -1327,7 +1327,7 @@ confadd_global(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->servername, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_INFO))
+        else if(tmp->type && (tmp->type->flag == SCONFF_INFO))
         {
             if(x->info)
             {
@@ -1337,7 +1337,7 @@ confadd_global(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->info, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_DPASS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_DPASS))
         {
             if(x->diepass)
             {
@@ -1347,7 +1347,7 @@ confadd_global(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->diepass, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_RPASS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_RPASS))
         {
             if(x->restartpass)
             {
@@ -1406,7 +1406,7 @@ confadd_class(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_NAME))
+        if(tmp->type && (tmp->type->flag == SCONFF_NAME))
         {
             if(x->name)
             {
@@ -1417,7 +1417,7 @@ confadd_class(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->name, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_PINGFREQ))
+        else if(tmp->type && (tmp->type->flag == SCONFF_PINGFREQ))
         {
             if(x->pingfreq > 0)
             {
@@ -1428,7 +1428,7 @@ confadd_class(cVar *vars[], int lnum)
             tmp->type = NULL;
             x->pingfreq = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_CONNFREQ))
+        else if(tmp->type && (tmp->type->flag == SCONFF_CONNFREQ))
         {
             if(x->connfreq > 0)
             {
@@ -1446,7 +1446,7 @@ confadd_class(cVar *vars[], int lnum)
             if (x->ip24clones < 1)
                 x->ip24clones = 0;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_MAXUSERS))
+        else if(tmp->type && (tmp->type->flag == SCONFF_MAXUSERS))
         {
             if(x->maxlinks > 0)
             {
@@ -1459,7 +1459,7 @@ confadd_class(cVar *vars[], int lnum)
             tmp->type = NULL;
             x->maxlinks = atoi(tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_MAXSENDQ))
+        else if(tmp->type && (tmp->type->flag == SCONFF_MAXSENDQ))
         {
             if(x->maxsendq > 0)
             {
@@ -1498,7 +1498,7 @@ confadd_kill(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_MASK))
+        if(tmp->type && (tmp->type->flag == SCONFF_MASK))
         {
             if(host)
             {
@@ -1515,7 +1515,7 @@ confadd_kill(cVar *vars[], int lnum)
             else
                 host = tmp->value;
         }
-        if(tmp->type && (tmp->type->flag & SCONFF_REASON))
+        if(tmp->type && (tmp->type->flag == SCONFF_REASON))
         {
             if(ub_r)
             {
@@ -1584,7 +1584,7 @@ confadd_restrict(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & SCONFF_TYPE))
+        if(tmp->type && (tmp->type->flag == SCONFF_TYPE))
         {
             if(type > 0)
             {
@@ -1605,7 +1605,7 @@ confadd_restrict(cVar *vars[], int lnum)
             }
             type |= SBAN_LOCAL;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_MASK))
+        else if(tmp->type && (tmp->type->flag == SCONFF_MASK))
         {
             if(mask)
             {
@@ -1615,7 +1615,7 @@ confadd_restrict(cVar *vars[], int lnum)
             tmp->type = NULL;
             mask = tmp->value;
         }
-        else if(tmp->type && (tmp->type->flag & SCONFF_REASON))
+        else if(tmp->type && (tmp->type->flag == SCONFF_REASON))
         {
             if(reason)
             {
@@ -1668,7 +1668,7 @@ int confadd_ssl(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if (tmp->type && (tmp->type->flag & SSTF_CERTIFICATE)) {
+        if (tmp->type && (tmp->type->flag == SSTF_CERTIFICATE)) {
             tmp->type = NULL;
 			if(strncmp("/", tmp->value, 1) == 0) {
 				// Absolute path
@@ -1676,14 +1676,14 @@ int confadd_ssl(cVar *vars[], int lnum)
 			} else {
 				snprintf(SSL_Certificate, sizeof(SSL_Certificate), "%s/%s", CONFIG_PATH, tmp->value);
 			}
-        } else if (tmp->type && (tmp->type->flag & SSTF_KEYFILE)) {
+        } else if (tmp->type && (tmp->type->flag == SSTF_KEYFILE)) {
             tmp->type = NULL;
 			if (strncmp("/", tmp->value, 1) == 0) {
 	            strncpyzt(SSL_Keyfile, tmp->value, sizeof(SSL_Keyfile));
 			} else {
 				snprintf(SSL_Keyfile, sizeof(SSL_Keyfile), "%s/%s", CONFIG_PATH, tmp->value);
 			}
-        } else if (tmp->type && (tmp->type->flag & SSTF_UMODEZ)) {
+        } else if (tmp->type && (tmp->type->flag == SSTF_UMODEZ)) {
             tmp->type = NULL;
             new_confopts |= FLAGS_LETUMODE_z;
         }
@@ -1701,12 +1701,12 @@ int confadd_elmer(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if (tmp->type && (tmp->type->flag & EETF_STRING))
+        if (tmp->type && (tmp->type->flag == EETF_STRING))
         {
             tmp->type = NULL;
             DupString(last_word, tmp->value);
         }
-        if (tmp->type && (tmp->type->flag & EETF_TRANSLATE))
+        else if (tmp->type && (tmp->type->flag == EETF_TRANSLATE))
         {
             tmp->type = NULL;
             if (last_word)
@@ -1746,7 +1746,7 @@ confadd_modules(cVar *vars[], int lnum)
 
     for(tmp = vars[c]; tmp; tmp = vars[++c])
     {
-        if(tmp->type && (tmp->type->flag & MBTF_PATH))
+        if(tmp->type && (tmp->type->flag == MBTF_PATH))
         {
             if(x->module_path)
             {
@@ -1756,7 +1756,7 @@ confadd_modules(cVar *vars[], int lnum)
             tmp->type = NULL;
             DupString(x->module_path, tmp->value);
         }
-        else if(tmp->type && (tmp->type->flag & MBTF_AUTOLOAD))
+        else if(tmp->type && (tmp->type->flag == MBTF_AUTOLOAD))
         {
             if((ac+1) > 128)
             {
@@ -1768,7 +1768,7 @@ confadd_modules(cVar *vars[], int lnum)
             DupString(x->autoload[ac], tmp->value);
             ac++;
         }
-        else if(tmp->type && (tmp->type->flag & MBTF_OPTLOAD))
+        else if(tmp->type && (tmp->type->flag == MBTF_OPTLOAD))
         {
             if((oc+1) > 128)
             {
