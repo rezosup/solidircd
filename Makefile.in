@@ -43,8 +43,7 @@ build:
 	fi
 	@for i in $(SUBDIRS); do \
 		echo "Building $$i";\
-		cd $$i;\
-		${MAKE} build; cd ..;\
+		(${MAKE} -C $$i build || die "Error building $$i" );\
 	done
 	@echo "******************************************************************************"
 	@echo "* For help with solid-ircd, please refer to http://solid-ircd.com            *"
@@ -104,9 +103,7 @@ install: all
 		mkdir $(INSTALL_DIR); \
 	fi
 	@for i in $(INSTDIRS); do \
-		cd $$i; \
-		$(MAKE) install; \
-		cd ..; \
+		$(MAKE) -C $$i install; \
 	done
 	@echo ""
 	cp -Ri  ssl $(INSTALL_DIR)
