@@ -1,0 +1,63 @@
+SSL Tutorial v0.2
+This document was originaly written by mj (mj@solid-ircd.com) on 10/05/2005
+Last revised by Gabriel Baez (sheik@solid-ircd.com) on 12/26/2005
+
+
+
+Introduction to SSL
+-------------------
+Information you exchange with an IRC server over a secure connection can not be 
+viewed or changed by others. However, be aware that traffic between public servers 
+on a network is exchanged over plain, open unencrypted lines. This means that if 
+you want to be sure that your communication is secure, you and the person with whom 
+you want to communicate securely should both connect to the same SSL-capable server, 
+and communicate via a query window.
+
+
+In this tutorial It's presumed that you have already configured, compiled and installed
+solid-ircd without any errors. In addition to that you should have installed the latest 
+version of OpenSSL and Kerberos to use the SSL encryption.
+
+First we have to generate a public key and a secret key for SSL encryption for
+solid-ircd. For this purpose you should use the "makecert.sh" shell script 
+located in the "ssl" directory of the solid-ircd source directory you extracted 
+before.
+
+Change to the "ssl" directory and start the script: "./makecert.sh newcert"
+This will generate a new SSL certificate. All fields are self-explanatory, but pay 
+attention to the input for "Common Name". That must be your FQDN (Fully 
+Qualified Domain Name) of your IRCd's host (not your hub address or something), 
+e. g. "super.ircd.network.org".
+
+If the process works without any errors, then two files will be generated: 
+"vgc.pem" and "vgckey.pem" The first one is the public key the second one is the 
+private key.
+
+It's suggested to create a subdirectory called "ssl" in solid-ircd's install 
+directory, e. g. "/usr/local/solid-ircd/ssl". Move the two key files there. You 
+can rename it, if you want to, e. g. "myserver.pem" and "myserverkey.pem". Then 
+change the files' ownership to the IRCd user: "chown ircd:ircd myserver.pem 
+myserverkey.pem". Be sure to set the permissions to 600, so that only the owner 
+is able to read and write: "chmod 600 myserver.pem myserverkey.pem"
+
+Then you have to tell solid-ircd where the key files live. That's done by 
+editing the "ssl" block in your configuration:
+
+ssl {
+    certificate "ssl/myserver.pem";     # Server Certificate
+    keyfile  "ssl/myserverkey.pem";     # Keys for the server
+    allow_umodez;                       # Allow SSL users to change UMODE_z
+};
+
+Finally, you must specify which ports should be used for SSL encrypted traffic. 
+You have to add a line to one of your "port" configuration blocks like this:
+
+port {
+    port    7000;
+    bind    1.2.3.4;
+    ipmask  *;
+    type    "SSL";
+};
+
+That's it. Have fun with your SSL-ready Solid-IRCd!
+

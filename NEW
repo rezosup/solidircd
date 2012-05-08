@@ -1,0 +1,146 @@
+This file is maintained by Sheik (sheik@solid-ircd.com)
+Last revised on 12/3/2006
+
+New - solid-ircd 3.4.7(stable)
+------------------------------
+
+
+User Modes & Oper Modes Changes
+---------------------------------
+User mode +Y (Deaf Mode)
+Opermode (+W) Will hide servers & channels on ircop's whois from normal users.
+Whois notice has been merged with (+y)
+
+
+
+Core Changes
+------------------
+Elmer has been fully implemented on this release
+Readded G-line
+GCC4 compatible.
+Readded FREEZE from solid-ircd2.2.20(Freeze works like shun, when set the user will not be 
+able to send text to the channel, if the user reconnects when freeze is set, it will wear off,
+this was readded for the purpose of saving some time, its quicker than setting shun, since freeze
+is simply set by doing /freeze nick)
+
+
+
+Configuration Changes
+---------------------
+
+Added the following on config.h
+--------------------------------
+
+
+/*
+ * ERROR_FREEZE_NOTICE
+ * When a user is freezed if this is defined the user will get a error message of text not send
+ * when ever they attempt to talk.
+ */
+
+#undef ERROR_FREEZE_NOTICE
+
+
+/* 
+ * STRICT_LIST
+ * This function is enabled by default it prevents unregistered
+ * users from viewing channels using /list they're notified  to use /qlist instead
+ * this helps prevent spambots.
+ * -Sheik 16/04/2005
+ *
+ */
+
+#define STRICT_LIST
+
+
+/* 
+ * IRCOP_LIST
+ * This option will enable /ircops  which list all the active
+ * opers on the network, +H opers are excluded from this.
+ * Added by Sheik on  22/04/2005
+ *
+ */
+
+#define IRCOP_LIST
+
+
+/* STRICT_HOSTMASK  
+ *
+ * This function prevents users from unsetting +v
+ * This is used to prevent users from evading bans by unsetting their hostmaks.
+ */
+
+#define STRICT_HOSTMASK
+
+/*
+ * STATS_P_ENABLED
+ * If Defined will make a /stats P request by opers return
+ * all listneing ports and rather they are ssl or not
+ * if not defined it acts as a /stats p request
+ */
+#define STATS_P_ENABLED
+
+/*
+ * STATS_P_OPERONLY
+ * Recommended
+ * Allows only opers to do a /stats P request and view
+ * Listening ports and rather they are ssl or not
+ * Requires STATS_P_ENABLED
+ * if you undefine this you must also undefine NO_LOCAL_USER_STATS  
+ *  & NO_USER_STATS  only do this if you want normal users to  be able to use /stats 
+ */
+
+#define STATS_P_OPERONLY
+
+
+/* PLUS_R_TO_NONREG_WARN
+ * Warn +R users that their target will not be able to reply.
+ */
+
+
+#undef PLUS_R_TO_NONREG_WARN
+
+
+
+/*
+ * RESTRICT_ADMINONLY
+ * This function will restrict stats C & c for server administrators only.
+ *
+ */
+
+ #define RESTRICT_C_LINES_ADMINONLY
+
+
+
+/*
+ * DEFAULT_GLINE_TIME
+ *
+ * Define this to the default time for a gline (in minutes) for glines with
+ * unspecified times.  A time of 0 will create a permanent gline.
+ */
+
+#define DEFAULT_GLINE_TIME 30
+
+
+/*
+ * GLINE_MIN_STORE_TIME
+ *
+ * The minimum duration (in minutes) a gline must be before it will be stored
+ * in the on-disk journal.
+ */
+
+#define GLINE_MIN_STORE_TIME 180
+
+/*
+ * GLINE_STORE_COMPACT_THRESH
+ *
+ * The maximum number of entries to write to the active gline storage journal
+ * before compacting it.  This threshold prevents the journal from growing
+ * indefinitely while glines are added and removed on a running server.
+ */
+
+#define GLINE_STORE_COMPACT_THRESH 1000
+
+
+#define NETWORK_GLINE_NAME	    "g-line"
+#define NETWORK_GLINNED_NAME	"g-lined"

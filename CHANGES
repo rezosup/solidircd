@@ -1,0 +1,398 @@
+####################################
+# $Id$
+# $Name:  $
+# $Source: /cvsroot/solidircd/solidircd-stable/CHANGES,v $
+####################################
+
+ 
+
+------------------------------
+Changes for  solid-ircd 3.4.8(stable)
+----------------------------
+
+------------------------
+ Changes from Sheik
+-------------------------
+
+25/6/2006 - Changed OperWalk and OperMode to be for Services Administrators only.
+25/6/2006 - Added Denora on the list of aliases so /ds should send privmsg to denora.
+25/6/2006 - Removed the freeze code it was buggy and shun performs the same function anyway.
+
+------------------
+Changes from Tux
+---------------
+
+25/6/2006 - Fixed problem with K-line,G-line,A-kill not banning realhost it was only looking at masked host.
+
+
+------------------------------
+Changes for  solid-ircd 3.4.7(stable)
+----------------------------
+
+
+------------------
+Changes from Tux
+---------------
+30/12/2005 - Fixed Task #60 on solid-ircd.com
+25/12/2005 - Fixed elmer issue.
+25/12/2005 - Fixed g-line message issue.
+25/12/2005 - Fixed g-line not being sent to other servers.
+25/12/2005 - Fixed shun not being sent to other servers either.
+25/12/2005 - Fixed a nasty code in userban_sweep. 
+09/07/2005 - Fixed 'free_func' FreeBSD compilation error.
+09/07/2005 - Fixed rquit.
+09/07/2005 - Fixed elmer.
+02/07/2005 - Added conops notice on client exit.
+
+-----------------
+Changes from Danny
+------------------
+
+03/05/2005 - Fixed  Non opers can set themselves usermode +H (hidden oper)                                                    [ #1194884 ]
+03/05/2005 - Fixed /ircops shows opers who have set usermode +H (hide operstatus)                                             [ #1194878 ] 
+03/05/2005 - Fixed  halfops cannot voice or devoice a user.                                                                   [ #1193540 ]
+
+--------------------
+Changes from Trystan
+--------------------
+07/01/2006 - Fixed GCC4 compiler warnings
+
+------------------------
+ Changes from Sheik
+-------------------------
+19/3/2006  - Shunned & Freezed users can't join or part new channels & current channels.
+17/3/2006  - Fixed some typos in channel.c
+17/3/2006  - Changed some of the text messages on channel.c to be shorter.
+17/3/2006  - Fixed a bug in shun not been set properly. [BUG ID #63]
+17/3/2006  - Readded the Freeze command from solid-ircd2.2.20
+12/3/2006  - Fixed g-lines not showing on stats b.
+12/3/2006  - Fixed WHOIS_ACTUALY Not showing host.
+2/1/2006   - Added RESTRICT_C_LINES_ADMINONLY this function will restric stats C & c to admins only. (optional)
+30/12/2005 - Fixed compile error when openssl was disabled.
+03/09/2005 - Added g-line 
+30/05/2005 - Fixed some typos in s_user.c
+30/05/2005 - Added Deaf Mode, This mode will prevent user with said mode from receiving channel messages.   
+    This mode can be applied by the user or an oper. It can decrese bandwidth usage.
+21/05/2005 - Applied  a hostmask tweak from Crako thnx.
+21/05/2005 - Fixed a minor bug, when user was kicked, it would show on their whois that they were still there. thanks to Crako for reporting this.
+17/05/2005 - Applied Unim4trix0's patch,This patch notifies +R users when their target cannot reply becuase they are not +r.
+17/05/2005 - Readded bsd jail support.
+17/05/2005 - Fixed OperMode givin false oper notices.
+16/05/2005 - Merged WHOIS notice with umode +y
+15/05/2005 - Added /Stats P  this will display the port range on  your local ircd and available SSL ports if any.
+16/05/2005 - Fixed bug were halfops were not able to set any chanel modes, they're now able to ban set +ntm etc..             [ #1200237 ] 
+15/05/2005 - Disabled multiple buffer support for iovecs for ssl are impractical. 
+found in ssl engine:
+/*
+ * There is no SSL_writev() provided by OpenSSL. The reason is mainly because
+ * OpenSSL has to fragment the data itself again for the SSL record layer, so a
+ * writev() like interface makes not much sense.  What we do is to emulate it
+ * to at least being able to use the write() like interface. But keep in mind
+ * that the network I/O performance is not write() like, of course.
+ */
+ When this was enable it was causing alot of times for users.
+15/04/2005 - Optimized and fixed SSL we now support multiple buffers.
+15/04/2005 - Added /IRCOPS command this will show all online irc operators this can be enable/disabled in include/config.h  
+15/04/2005 - Updated /INFO to show our latest team members ;)
+15/04/2005 - Added SVIDENT and SETIDENT this will allow hostserv to set virtual idents for users.
+01/10/2005 - Removed the saadmin,ircop, blocks we will now be using the staff host for operhostmasking
+01/10/2005 - Changed the  ircop status, to bahamut defaults ircop status, ex (IRC Operator - Server Administrator)
+01/10/2005 - Changed  our  elmer,silly,normal to be a optional features now admins who don't like to have this on can easily turn it off in config.h
+01/10/2005 - Added md5.h and md5.c this currently does not do anything is just there for future use.
+01/10/2005 - Tweaked ssl.c up a bit.
+01/10/2005 - Added ssl notification on user connections, we can now tell if a user is a ssl connection when they connect. ;)
+01/10/2005 - List is now restricted to registered users and ircops,  this is to prevent spambots from  getting our channel list
+a new "bot" class has also been added in the  template.conf to allow bots such as from netsplit.de etc.. to get our channel
+list. This can be enable or disable just look in config.h for STRICT_LIST 
+
+---------------------
+Applied Bahamut Changes for bahamut 1.8.4
+----------------------
+
+03/09/2005 - Fixed misc conf parsing issues (from GeniusDex)
+03/09/2005 - Fixed unknown connection reporting in LUSERS
+03/09/2005 - Fixed LIST C> not working at all
+03/09/2005 - Fixed memory leaks in SVSHOLD and LIST options
+03/09/2005 - Fixed busy loops with the epoll socket engine
+03/09/2005 - Fixed LIST wildcard mask detection
+03/09/2005 - Changed oper access flag * to include everything
+03/09/2005 - Changed failed link messages to provide more info to +A opers
+03/09/2005 - Changed cmode +c to block all control codes (except CTCP and ISO-2022)
+03/09/2005 - Added oper access flags for umodes ydb
+03/09/2005 - Reworked memory accounting:
+    stats z  shows short summary
+    stats Z  shows detailed reports
+    MEMTRACE define in config.h to debug memory leaks, adds to Z report
+03/09/2005 - Changed general connection reporting format to reduce ambiguity
+   (affects stats L, trace, etc):
+    servers:  name[host]
+    clients:  nick!user@host
+    unknown:  name([F]ident@host)
+      where name is a nick or "<unnamed>"
+      where F is:
+        ?  identd lookup in progress
+        +  valid identd response
+        -  no identd response (ident is "unknown")
+4/7/2005   - rework memory accounting,add MEMTRACE for debugging, minor memroy leak fix.
+26/06/2005 - Fixed a bug were users real host would show on watch when they connected.
+17/05/2005 - Fixed LIST C>this was broken in dreamforge...
+17/05/2005 - Applied a fix for m_server don't broadcast a server IP (from David Friedman)
+17/05/2005 - Fixed some lusers bugs.
+17/05/2005 - Change in channel.c don't warn for U:lined sjoins
+17/05/2005 - Added Unim4trix0's rejection numeric fix
+17/05/2005 - Tweaked join rate notices.
+17/05/2005 - Tweaked for Chase deterrent for bans.
+17/05/2005 - Split umodes ydb into separate oper access flags
+17/05/2005 - Better link diagnostics
+17/05/2005 - Change +c over to blocking all control codes
+17/05/2005 - Work around a potential race condition
+17/05/2005 - clean up get_client_name handling fixes several cosmetic ambiguitites reported by various people
+15/05/2005 - Removed support for wildcard nick targets in remotable commands 
+15/05/2005 - Fixed channel modes not showing both +s and +p 
+15/05/2005 - Fixed a race condition that could lead to crashes under flood load 
+15/05/2005 - Fixed WHO incorrectly handling CIDR searches 
+15/05/2005 - Fixed crash during bad server introductions 
+15/05/2005 - Fixed an obscure bug with remotely targeted commands and local clients 
+  (from toucan)
+01/10/2005 - Fixed recursive server removal for non-NOQUIT links
+01/10/2005 - Fixed TS desync during nick changes
+01/10/2005 - Fixed RWHO reporting wrong channel member flags
+01/10/2005 - Fixed RWHO limit handling during clone searches
+01/10/2005 - Fixed mangled SET LCLONES reply
+01/10/2005 - Fixed CTCP flud trips on CTCP ACTIONs (from scatterbrain)
+01/10/2005 - Fixed cmode +j 0 sync bug (again)
+01/10/2005 - Fixed crash when conf file doesn't exist on rehash
+01/10/2005 - Fixed conf include directive parsing
+01/10/2005 - Fixed non-hubs trying to autoconnect to multiple servers
+01/10/2005 - Fixed incorrect (R)WHO +t description in help
+01/10/2005 - Fixed motd timestamp handling (from scatterbrain)
+01/10/2005 - Fixed duplicate link reporting for Ulined servers
+01/10/2005 - Fixed numeric 338 colon placement
+01/10/2005 - Fixed trailing spaces added to AWAY messages
+01/10/2005 - Increased channel invite list to 100 entries
+01/10/2005 - Removed WATCH and DCCALLOW limits for opers (from wshs)
+01/10/2005 - Removed 2-user minimum default for LIST filters
+01/10/2005 - Changed join rate warnings to show IP instead of hostname
+01/10/2005 - Reworked m_message().  Behavior changes:
+    - corrected error responses
+    - error responses only sent for PRIVMSG, not NOTICE
+    - #hostmask target support removed
+    - no wildcard restrictions on $servermask target
+    - $$servermask target is now identical to $servermask
+    - U:lined clients talk through SILENCE
+    - RPL_AWAY response sent by sender's server, not recipient's
+    - services-related behavior controlled by config.h
+      (DENY_SERVICES_MSGS, PASS_SERVICES_MSGS, SUPER_TARGETS_ONLY)
+
+01/10/2005 - Reworked services special-casing:
+    - shortform commands (NS/CS/etc) always sent between normal servers,
+      translated to long forms for super servers
+    - in SERVICESHUB mode:
+        - shortforms sent to Services_Name
+        - AWAY never sent to Services_Name
+        - TOPIC in initial netburst not sent to Services_Name or Stats_Name
+        - GOPER/GNOTICE/GLOBOPS/CHATOPS never sent to super servers
+        - channel PRIVMSG/NOTICE never sent to super servers
+01/10/2005 - Server protocol changes:
+    Added CHANKILL <channel> [reason]
+      completely destroys a channel and related state
+    Shortform commands are used for non-ULined links
+      NS CS MS RS OS HS SS
+01/10/2005 - Fixed rehash bug with specific conf changes that caused memory
+  corruption and crashes
+01/10/2005 - Fixed a possible buffer overflow issue in oper hostmasking
+01/10/2005 - Fixed solaris devpoll socket engine logic problems.
+01/10/2005 - Fixed class reference counting errors.
+01/10/2005 - Fixed a bug with cmode +j propagation on resync
+01/10/2005 - Added a second set of join counters to send warning notices
+  to +d opers when the default thresholds are met.  Still sends
+  a throttle notice when cmode +j thresholds are met.
+01/10/2005 - Changed ERR_BANLISTFULL to respond depending on which list
+  (+b/+I/+e) is full.  From Unim4trix0 (Unim4trix0@gmail.com).
+01/10/2005 - Readded clone limiting (now better!), see doc/clones.txt
+01/10/2005 - Range limiting for cmode +j args (static 4:2 - 60:60, rate 1/8 - 2/1).
+01/10/2005 - Fixed spamming redudant cmode changes.
+01/10/2005 - Fixed bad handling of bogus oper messages (from Zeke Gomez).
+01/10/2005 - Fixed rehash issue with module blocks.
+01/10/2005 - Fixed samode with no mode arguments choosing one at random for you :)
+01/10/2005 - Increased throughput on data sent to clients.
+01/10/2005 - Changed ERR_CHANNELISFULL to respond depending on which limit
+  (+l/+j) is reached.  From Unim4trix0 (Unim4trix0@gmail.com),
+  discovered by Watchminister (watchminister@gmail.com).
+01/10/2005 - Changed cmode +O join rejection to use ERR_INVITEONLY numeric.
+01/10/2005 - Enabled umode +s (oper kills) for users, disabled +g (useless).
+01/10/2005 - RWHO now sports clone and joined channel awareness.
+01/10/2005 - Added flags token to allow blocks, see doc/reference.conf
+01/10/2005 - Allow blocks with passwords are now hidden from nonopers in /stats I
+
+Changes for Solid-3.4.6 (stable)
+------------------------
+- Added STRICT_LIST this will restrict /list to registered users  and ircops only, it can be enable or disable in include/config.h
+- Fixed rehash bug with specific conf changes that caused memory corruption and crashes 17/04/2005
+- Added our /INFO, moved dalnet info to /DALINFO
+- RFE #1059256 - Who/Trace/Whowas - maskhost/Oper (http://sourceforge.net/support/tracker.php?aid=1059256)
+- Fixed bug #1051239 - opermode cancels out when halfoped (http://sourceforge.net/support/tracker.php?aid=1051239).
+- Fixed bug #1057917 - umode +H mask issue (http://sourceforge.net/support/tracker.php?aid=1057917).
+- Fixed bug where user_match_ban would use the masked host, instead of the real host (Thanks Waqario!).
+- Moved HIDDEN_SERVER_NAME to the ircd.conf (HiddenServName)
+- Moved HIDDEN_SERVER_DESC to the ircd.conf (HiddenServDesc)
+- Fixed umode +v bug reported by Waqario.
+
+Changes for Solid-3.4.5	
+------------------------
+- Added umode +C - Global Connections
+- Added elmer, silly, and normal.
+- Shuns are now sent on burst.
+- Added cmode +S (SSL Connections Only)
+- Added cmode +h (halfops)
+- Added ssl ircd.conf block.
+- Added umode +z - Secure Socket Layer
+- Added Client SSL support
+- Added cmode +N - No nickname changes on channel.
+- Added umode +H - Oper Hiding.
+- /stats x or X to see the list of shuns.
+- Added UNSHUN
+- Added SHUN
+
+Changes for Solid-3.4.2
+------------------------
+
+- OperMode and OperWalk added.
+- Added m_map
+- Correctly display an oper's status on a whois.
+- Automatically set +a/A upon opering if the oper has the correct oflags.
+- User and oper host masking.
+- Added a few ircd.conf options:
+        rquit, sadmin_host, admin_host
+        ircop_host, locop_host, host_domain, 
+        host_prefix, auto_umode_R, auto_umode_v;
+- Applied BSD jail patch.
+- Added /msg raw reparser for handicap clients.
+
+applied the following bahamut changes
+-----------------
+- fixed entropy generation on OpenBSD and cleaned up status messages 
+  (from Mark19960)
+- fixed cosmetic error in /stats C reply
+- fixed autoconnect blast when connect->port was specified but not 
+  class->connfreq (from Mark19960)
+- fixed crash on /stats request from a server (from Mark19960)
+- fixed invite exceptions not working at all (from wshs)
+- fixed ban exemptions not affecting bquiet (from wshs)
+- fixed -e/-I sync failure during netbursts of older channels
+- tweaked reference.conf
+- corrected new find_port() check
+- now removing simbans (restrict blocks) on rehash (from Ballsy)
+- fixed cosmetic errors in nick collision kills (from Goplat)
+- Converted old "X line" messages to "X block"
+- Changed stray free() to MyFree()
+- Corrected a tolower() reference I missed the first time around
+- Removed ancient prototype causing compile failures with gcc 3.4
+- Fixed 005 WATCH token (was using incorrect number)
+- Removed temporary debug code causing compile failure when !USE_SYSLOG
+- Finished correcting same port, multiple IP binds
+- stats L shows user IPs again (but still hides opers)
+- Numerics 477 and 487 no longer hardcoded dal.net
+- Fixed numeric responses for certain PRIVMSG/NOTICE targets
+- Updated reference.conf and template.conf with additional bits and better
+  documentation of Allow block quirks
+- Tweaked handling and display of removed-but-not-yet-deleted conf entries
+  after a rehash (Oper, Connect, Class)
+- Oper block host entries are now matched against the user@host that would
+  appear on IRC (previously what they matched was a bit convoluted)
+- Corrected class maxusers handling -- applies to the class, not the allow
+  block
+- Updated 004 and 005 numerics
+- trace now shows the class list again
+- bquiet is now using deferred cache concept from ratbox to deal with ban
+  exemptions correctly
+- Ban exemptions are now marked with type and checked during nick_is_banned()
+- Begin unbreaking redundant ban check -- will take at least one more release
+  to complete
+- Cleaned up related channel ban code
+- CHOOK_10SEC is now called when it should be (from wshs)
+- Unbroke modules command handling (from wshs)
+- Fixed modules load crash when there was no Modules block in ircd.conf 
+  (from wshs)
+- Fixed SVSKILL crash on no parameters (from Zeke Gomez)
+- Compile fixes for DNS_DEBUG and DEBUGMODE (but don't use DEBUGMODE)
+- Compile fix for missing LINE_MAX
+- Spellcheck: virii -> viruses (from The List)
+- HIDE_LINKS functionality inverted and attached to show_links token in 
+  Options block
+- NO_CHANOPS_WHEN_SPLIT functionality inverted and attached to allow_split_ops
+  token in Options block
+- Merging duplicate Allow blocks during rehash to avoid admin confusion
+- Boolean Options block items can now be disabled by rehash
+- Fixed "servtype hub" causing certain previously specified options to reset
+  to defaults
+- Fixed a loop error report that was broken when it was introduced 11 years ago
+- Ignoring SVSMODE +o/O attempts (not handled correctly)
+- Repaired showing of +s channels in LIST to +A users
+- Fixed and document DENY_SERVICES_MSGS (from wshs)
+- Corrected structfunc.h prototypes for modules (from wshs)
+- Added SVSMODE -e/-I support for channels
+- Fixed .maxclients not being read on startup
+- Rewrote m_invite(), behaves logically now
+- Enabled cmode +j (joins:secs rate limit)
+- Fixed resolver cache corruption (and crash), mostly affected newer RedHat
+  thanks huni and Sarcast for patience, analysis, and cores
+- More conf documentation clarity
+- Unresolved class reference in conf now reports class name
+- Updated RPL_VERSION, RPL_ISUPPORT; now running from a cache in s_debug.c
+- Removed sockhost data from RPL_YOURHOST, since it was always zeroed
+- Squished more memory corruption bugs
+  thanks Glitch and dev0 for more patience and cores
+- Module support is now unconditionally disabled under OS X
+- Build system now handles FD_SETSIZE properly when using the select engine
+- Internal maxconnections and SET MAX handling is rational again
+  ircd can run with as few as 20 FDs and support 10 clients
+- Ripped out obsolete sendto_match_servs()
+- Added support for non-noquit servers in #define NOQUIT
+- Updated zlib to version 1.2.1
+- Restricted stats q/Q/g to opers
+- Show IPs in stats C to services and local +A
+- Added RWHO, see /rwho ? and doc/pcrepattern.html for info
+- Set +k and +s umodes to opers only.
+- Fixed a bug in m_trace that caused cores when issuing a /trace when
+  connecting to a server.
+- ERR_WHOSYNTAX reply changed to ERR_NOPRIVILEGES for non opers trying oper restricted
+  who, but using correct syntax : fixed by Unim4trix0 (AviN456@gmail.com)
+
+- Removed backwards compatibility for:
+	- NOQUIT
+	- UNCONNECT
+	- TSMODE
+	- NICKIP
+  All of these modes are now REQUIRED.
+- Removed Code and defines for outdated stuff:
+	- FOLLOW_IDENT_RFC
+	- NO_IDENT_SYSTYPE_OTHER
+	- NO_MIXED_CASE
+	- OLD_Y_LIMIT
+	- USE_REJECT_HOLD
+  This code is no longer used.
+- Removed define options for:
+	- CLIENT_COUNT
+  This code is now manditory.
+- Completely rewrote configuration structures.
+- Rewrote methods for connecting to servers.
+- Outdated Link structure config linking, now linking directly from
+  aClient(user/serv) structures to appropriate conf strucutures.
+- Backported lucas's aListener structure and routines from defunct
+  bahamut-devel tree.
+- Implemented +I/+e channel lists - thanks seddy.
+- Ports now can be opened and closed on /rehash
+- config file format changed to bind-style
+- klinefile outdated
+- replaced dbufs with sbufs - shared buffers.
+- removed old High Traffic Mode (HTM) code
+- config option block added to outdate use of ./config script
+- fixes for solaris and OSX compatibility
+- Added support for /dev/poll and epoll socket engines - thanks seddy.
+- Moved m_server and m_dkey into m_server.c
+- Moved m_stats into m_stats.c
+- Fixed memory counting routines.  Thanks Quension!
+- Outdated modules.ini and all inifile uses - now a modules {} conf block
+- Updated m_module to allow non-admin viewing of hooks and loaded modules
+- Added module hooks for user and channel targetted privmsgs

@@ -1,0 +1,20 @@
+#!/bin/sh
+#file imported from ultimate-ircd.
+
+VERSION=3.4.7
+IRCDPID="ircd.pid"
+
+echo "Checking to see if your ircd is running...."
+if [ ! -r $IRCDPID ]; then
+#clear
+echo "             error"
+echo "             Possible problems:"
+echo "(1) $IRCDPID not found"
+echo "(2) The IRCd is not running"
+else
+PID=`cat $IRCDPID`
+kill -HUP $PID
+echo "successfully rehashed."
+echo "Process ID: $PID"
+fi
+

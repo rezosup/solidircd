@@ -1,0 +1,87 @@
+Solid-IRCD 3.4.7 Development Version To do List.
+Last Reviewed by Gabriel Baez(Sheik) on 08/06/2005
+
+----------------------
+[ ] = Not Done
+[/] = Part Done
+[X] = Done
+----------------------
+Notes: 
+
+Developers
+--------------------
+tm2
+Tux`
+The_Sphere
+Sheik
+-------------------
+
+Developers Todo list:
+
+[X]  Sync with bahamut 1.8.4
+     Being worked by: Sheik
+     Progress: 100%
+     Description:
+
+
+
+[X]  Complete elmer Implementation
+     Being worked by: Tux
+     Progress: 100%
+     Description:
+
+
+[X] Implement G-line
+    Being worked by: Sheik & Tux
+    Progress: 100%
+
+
+[X] Fix Whois on linked servers
+   not showing the full host.
+   Being Worked by: Sheik
+   Progress: 100%
+
+
+[/] Finish implementing Channel mode (+D)
+    At the moment it has been disabled.
+    Being worked by :Sheik
+    Progress: 
+
+
+[/] G-line & K-line should provide a notice to
+    opers when they expire.
+
+
+
+Documentation Team:
+--------------------
+dc - German Translator
+mj - German Translator
+pi - Spanish Translator
+
+Vacancies:
+-French Translators
+-Italian Transalors
+-Portuguese Translators
+-Dutch Translators.
+
+----------------------------
+
+Documentation team to do list:
+
+
+[/] Write HTML IRCD Documentation
+    Being Worked on by :
+    Progress:
+    Description:
+
+------------------------
+
+Quality Assurance Team:
+-----------------------
+ Waqario
+ Trystan
+ Fl00k
+ Sheik
+-----------------------
+
