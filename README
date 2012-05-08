@@ -1,65 +1,19 @@
-==========================================
-Installation de Solid-IRCd pour RezoSup v2
-==========================================
+Solidircd-rz
+============
 
-README v1.7
+Solidircd is the current ircd used by the `Rezosup <http://www.rezosup.org>`_ IRC server.
 
-Outils devant être pré-installés sur le système d'exploitation
---------------------------------------------------------------
+The current version is solidircd-3.4.8 + patches. It is itself a fork of bahamu-1.8.4.
 
-- perl
-- libgmp (sous BSD, installer la librairie mathématique libgmp4)
 
-Procédure d'installation
-------------------------
+Installation
+------------
 
-- Créer le répertoire d'installation du serveur (exemple) ::
+Refer to the INSTALL file.
 
-  $ mkdir /usr/local/ircd
+Credits
+-------
 
-- Décompresser l'archive de Solid-IRCd ::
+- Solidircd: `http://sourceforge.net/projects/solidircd/`_
+- Rezosup: `http://www.rezosup.net`_ / `http://www.rezosup.org`_
 
-  $ tar zxvf solidircd-stable3.4.8.tar.gz
-
-- Patcher Solid-IRCd avec le patch RezoSup ::
-
-  $ patch -p0 < patch-rz-2e-cho7.patch
-
-- Copier le script de configuration dans le répertoire de Solid-IRCd ::
-
-  $ cp config-rz-2e.pl solidircd-stable/
-
-- Lancer le script de configuration de RezoSup v2 ::
-
-  $ cd solidircd-stable/
-  $ ./config-rz-2e.pl
-
-/!\ dans les options de configuration, taper : --prefix=/usr/local/ircd
-   (il s'agit du répertoire d'installation créé plus haut)
-/!\ pour le cgiirc, éviter les caractères comme / ( ou ) dans le mot de
-    passe (problèmes possibles avec les expressions régulières)
-
-- Compiler et installer ::
-
-  $ make install
-
-Configuration du serveur
-------------------------
-
-- Générer la configuration de votre serveur à l'adresse :
-  http://www.inp-net.eu.org/rezosup/genconf.php
-
-- Copier le fichier de configuration dans le répertoire d'installation
-  avec le nom "ircd.conf"
-
-- Vérifier qu'il y a bien defender.rezosup.net dans le bloc super en plus
-  de services.rezosup.net. Vérifier aussi qu'il y a bien un bloc restrict
-  pour le nick defender
-
-- Copier le fichier template du MOTD "ircd.motd" dans le répertoire
-  d'installation, l'éditer et modifier ce qui se trouve entre crochets.
-
-- Lancer le serveur avec un utilisateur non privilégié ::
-
-  $ cd /usr/local/ircd (répertoire d'installation)
-  $ ./ircd
