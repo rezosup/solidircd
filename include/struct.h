@@ -1416,7 +1416,8 @@ struct Channel
 /* strncopynt --> strncpyzt to avoid confusion, sematics changed N must
  * be now the number of bytes in the array --msa */
 
-#define	strncpyzt(x, y, N) do{(void)strncpy(x,y,N);x[N-1]='\0';}while(0)
+//define	strncpyzt(x, y, N) do{(void)strncpy(x,y,N);x[N-1]='\0';}while(0)
+#define	strncpyzt(x, y, N)	do{(void)snprintf(x, N, "%s", y);}while(0)
 #define	StrEq(x,y)	(!strcmp((x),(y)))
 
 /* used in SetMode() in channel.c and m_umode() in s_msg.c */

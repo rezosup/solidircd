@@ -30,7 +30,7 @@
 #include "msg.h"
 #include "channel.h"
 #include "nameser.h"
-#include "resolv.h"
+#include <resolv.h>
 #include "dh.h"
 #include "zlink.h"
 #include "userban.h"

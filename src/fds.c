@@ -16,9 +16,9 @@
 #include "numeric.h"
 #include "memcount.h"
 
-void engine_add_fd(int);
-void engine_del_fd(int);
-void engine_change_fd_state(int, unsigned int);
+void engine_add_fd(long);
+void engine_del_fd(long);
+void engine_change_fd_state(long, unsigned int);
 
 struct afd_entry {
    int type;
@@ -81,7 +81,7 @@ static char *flags_string(unsigned int flags)
 
 void report_fds(aClient *cptr)
 {
-   int i;
+   long i;
    char *name, *blocking;
 
    for(i = 0; i < MAXCONNECTIONS; i++)
@@ -115,27 +115,27 @@ void report_fds(aClient *cptr)
 }
 #endif
 
-static inline void fd_range_assert(int fd)
+static inline void fd_range_assert(long fd)
 {
    if(fd < 0 || fd >= MAXCONNECTIONS)
       abort();
 }
 
-static inline void fd_notused_assert(int fd)
+static inline void fd_notused_assert(long fd)
 {
    if(fd_list[fd].type != FDT_NONE)
       abort();
 }
 
-static inline void fd_used_assert(int fd)
+static inline void fd_used_assert(long fd)
 {
    if(fd_list[fd].type == FDT_NONE)
       abort();
 }
 
-void add_fd(int fd, int type, void *value)
+void add_fd(long fd, int type, void *value)
 {
-   fdfprintf(stderr, "add_fd: %d %d %x\n", fd, type, (int) value);
+   fdfprintf(stderr, "add_fd: %d %d %x\n", fd, type, (long) value);
 
    fd_range_assert(fd);
    fd_notused_assert(fd);
@@ -146,7 +146,7 @@ void add_fd(int fd, int type, void *value)
    engine_add_fd(fd);
 }
 
-void del_fd(int fd)
+void del_fd(long fd)
 {
    fdfprintf(stderr, "del_fd: %d\n", fd);
 
@@ -160,7 +160,7 @@ void del_fd(int fd)
    fd_list[fd].internal = NULL;
 }
 
-void set_fd_flags(int fd, unsigned int flags)
+void set_fd_flags(long fd, unsigned int flags)
 {
    int oldflags;
    fd_range_assert(fd);
@@ -176,7 +176,7 @@ void set_fd_flags(int fd, unsigned int flags)
       engine_change_fd_state(fd, fd_list[fd].flags);
 }
 
-void unset_fd_flags(int fd, unsigned int flags)
+void unset_fd_flags(long fd, unsigned int flags)
 {
    int oldflags;
    fd_range_assert(fd);
@@ -191,7 +191,7 @@ void unset_fd_flags(int fd, unsigned int flags)
       engine_change_fd_state(fd, fd_list[fd].flags);
 }
 
-void get_fd_info(int fd, int *type, unsigned int *flags, void **value)
+void get_fd_info(long fd, int *type, unsigned int *flags, void **value)
 {
    fd_range_assert(fd);
 
@@ -200,7 +200,7 @@ void get_fd_info(int fd, int *type, unsigned int *flags, void **value)
    *value = fd_list[fd].value;
 }
 
-unsigned int get_fd_flags(int fd)
+unsigned int get_fd_flags(long fd)
 {
    fd_range_assert(fd);
    fd_used_assert(fd);
@@ -213,12 +213,12 @@ void init_fds()
    memset(fd_list, 0, sizeof(struct afd_entry) * MAXCONNECTIONS);
 }
 
-void set_fd_internal(int fd, void *ptr)
+void set_fd_internal(long fd, void *ptr)
 {
    fd_list[fd].internal = ptr;
 }
 
-void *get_fd_internal(int fd)
+void *get_fd_internal(long fd)
 {
    return fd_list[fd].internal;
 }

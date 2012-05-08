@@ -79,7 +79,7 @@ struct __res_state {
 	char	unused[3];
 	struct {
 		struct in_addr	addr;
-		u_int32_t	mask;
+		uint32_t	mask;
 	} sort_list[MAXRESOLVSORT];
 };
 

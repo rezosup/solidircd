@@ -12,7 +12,7 @@
 struct fd_callbackp {
    void (*callback)(struct fd_callbackp *);
    void *param;
-   int fd;  /* fd number                */
+   long fd;  /* fd number                */
    int rdf; /* fd is set for reading    */
    int wrf; /* fd is set for writing    */
 };
@@ -29,17 +29,17 @@ struct fd_callbackp {
 
 void init_fds();
 
-void add_fd(int fd, int type, void *value);
-void del_fd(int fd);
+void add_fd(long fd, int type, void *value);
+void del_fd(long fd);
 #define add_callback_fd(fds) add_fd((fds)->fd, FDT_CALLBACKP, (fds))
 #define del_callback_fd(fds) del_fd((fds)->fd)
 
-void get_fd_info(int fd, int *type, unsigned int *flags, void **value);
-void set_fd_flags(int fd, unsigned int flags);
-void unset_fd_flags(int fd, unsigned int flags);
+void get_fd_info(long fd, int *type, unsigned int *flags, void **value);
+void set_fd_flags(long fd, unsigned int flags);
+void unset_fd_flags(long fd, unsigned int flags);
 
-void set_fd_internal(int fd, void *ptr);
-void *get_fd_internal(int fd);
+void set_fd_internal(long fd, void *ptr);
+void *get_fd_internal(long fd);
 
 void check_client_fd(aClient *cptr);
 

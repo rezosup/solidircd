@@ -413,7 +413,7 @@ void sendto_one(aClient *to, char *pattern, ...)
     int len;            /* used for the length of the current message */
     
     va_start(vl, pattern);
-    len = ircvsprintf(sendbuf, pattern, vl);
+    len = ircvsnprintf(sendbuf, sizeof(sendbuf), pattern, vl);
    
     if (to->from)
         to = to->from;
@@ -450,7 +450,7 @@ void sendto_alias(AliasInfo *ai, aClient *from, char *pattern, ...)
         len = ircsprintf(sendbuf, ":%s PRIVMSG %s :", from->name, ai->nick);
 #endif
 
-    len += ircvsprintf(sendbuf+len, pattern, vl);
+    len += ircvsnprintf(sendbuf+len, sizeof(sendbuf) - len, pattern, vl);
     send_message(to, sendbuf, len, NULL);
     va_end(vl);
 }
@@ -459,7 +459,7 @@ void vsendto_one(aClient *to, char *pattern, va_list vl)
 {
     int len;            /* used for the length of the current message */
    
-    len = ircvsprintf(sendbuf, pattern, vl);
+    len = ircvsnprintf(sendbuf, sizeof(sendbuf), pattern, vl);
    
     if (to->from)
         to = to->from;
@@ -1423,7 +1423,7 @@ void sendto_prefix_one(aClient *to, aClient *from, char *pattern, ...)
         {
             if (IsServer(from)) 
             {
-                ircvsprintf(temp, pattern, vl2);
+                ircvsnprintf(temp, sizeof(temp), pattern, vl2);
                 sendto_ops("Send message (%s) to %s[%s] dropped from "
                            "%s(Fake Dir)", temp, to->name, to->from->name,
                            from->name);
@@ -1540,7 +1540,7 @@ void vsendto_prefix_one(aClient *to, aClient *from, char *pattern, va_list vl)
         {
             if (IsServer(from)) 
             {
-                ircvsprintf(temp, pattern, vl);
+                ircvsnprintf(temp, sizeof(temp), pattern, vl);
                 sendto_ops("Send message (%s) to %s[%s] dropped from "
                            "%s(Fake Dir)", temp,
                            to->name, to->from->name, from->name);
@@ -1632,7 +1632,7 @@ void sendto_fdlist(fdlist *listp, char *pattern, ...)
     void *share_buf = NULL;
     
     va_start(vl, pattern);
-    len = ircvsprintf(sendbuf, pattern, vl);
+    len = ircvsnprintf(sendbuf, sizeof(sendbuf), pattern, vl);
     sbuf_begin_share(sendbuf, len, &share_buf);
         
     for (fd = listp->entry[j = 1]; j <= listp->last_entry;
@@ -1646,7 +1646,7 @@ void vsendto_fdlist(fdlist *listp, char *pattern, va_list vl)
 {
     int len, j, fd;
     void *share_buf = NULL;
-    len = ircvsprintf(sendbuf, pattern, vl);
+    len = ircvsnprintf(sendbuf, sizeof(sendbuf), pattern, vl);
     sbuf_begin_share(sendbuf, len, &share_buf);
         
     for (fd = listp->entry[j = 1]; j <= listp->last_entry;

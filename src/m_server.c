@@ -52,11 +52,13 @@ static void sendnick_TS(aClient *cptr, aClient *acptr)
             ubuf[1] = '\0';
         }
 
-        sendto_one(cptr, "NICK %s %d %ld %s %s %s %s %lu %lu :%s",
+		// Force cast to uint32_t ; otherwise, potential problems on 64bits systems
+		uint32_t sent_ip = (uint32_t) htonl( (uint32_t) acptr->ip.s_addr);
+        sendto_one(cptr, "NICK %s %d %ld %s %s %s %s %lu %u :%s",
                        acptr->name, acptr->hopcount + 1, acptr->tsinfo, ubuf,
                        acptr->user->username, MyConnect(acptr) ? acptr->sockhost : acptr->user->realhost,
                        acptr->user->server, acptr->user->servicestamp,
-                       htonl(acptr->ip.s_addr), acptr->info);
+                       sent_ip, acptr->info);
 
         if (IsUmodev(acptr))
             sendto_one(cptr, "SVHOST %s %s",

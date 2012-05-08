@@ -17,13 +17,13 @@
 #include <sys/poll.h>
 
 struct pollfd poll_fds[MAXCONNECTIONS];
-int last_pfd = -1;
+long last_pfd = -1;
 
 void engine_init()
 {
 }
 
-void engine_add_fd(int fd)
+void engine_add_fd(long fd)
 {
    struct pollfd *pfd = &poll_fds[++last_pfd];
 
@@ -38,9 +38,9 @@ void engine_add_fd(int fd)
    pfd->revents = 0;
 }
 
-void engine_del_fd(int fd)
+void engine_del_fd(long fd)
 {
-   int arrayidx = (int) get_fd_internal(fd);
+   long arrayidx = (long) get_fd_internal(fd);
 
    /* If it's at the end of the array, just chop it off */
    if(arrayidx == last_pfd)
@@ -58,9 +58,9 @@ void engine_del_fd(int fd)
    set_fd_internal(poll_fds[arrayidx].fd, (void *) arrayidx);
 }
 
-void engine_change_fd_state(int fd, unsigned int stateplus)
+void engine_change_fd_state(long fd, unsigned int stateplus)
 {
-   int arrayidx = (int) get_fd_internal(fd);
+   long arrayidx = (long) get_fd_internal(fd);
    struct pollfd *pfd = &poll_fds[arrayidx];
 
    pfd->events = 0;
@@ -70,7 +70,7 @@ void engine_change_fd_state(int fd, unsigned int stateplus)
       pfd->events |= POLLOUT;
 }
 
-void engine_get_pollfds(struct pollfd **pfds, int *numpfds)
+void engine_get_pollfds(struct pollfd **pfds, long *numpfds)
 {
    *pfds = poll_fds;
    *numpfds = (last_pfd + 1);
@@ -81,7 +81,8 @@ int engine_read_message(time_t delay)
    static struct pollfd poll_fdarray[MAXCONNECTIONS];
 
    struct pollfd *pfd;
-   int nfds, nbr_pfds, length, i;
+   long nfds, nbr_pfds;
+   int length, i;
    unsigned int fdflags;
    int fdtype;
    void *fdvalue;

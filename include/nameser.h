@@ -162,7 +162,7 @@ UNDEFINED_BIT_ORDER;
 
 typedef struct
 {
-    u_short     id;		/* query identification number */
+    uint16_t     id;		/* query identification number */
 #if BYTE_ORDER == BIG_ENDIAN    
     
     /* fields in third byte */
@@ -202,10 +202,10 @@ typedef struct
 
     /* remaining bytes */
     
-    u_short     qdcount;		/* number of question entries */
-    u_short     ancount;		/* number of answer entries */
-    u_short     nscount;		/* number of authority entries */
-    u_short     arcount;		/* number of resource entries */
+    uint16_t     qdcount;		/* number of question entries */
+    uint16_t     ancount;		/* number of answer entries */
+    uint16_t     nscount;		/* number of authority entries */
+    uint16_t     arcount;		/* number of resource entries */
 } HEADER;
 
 /* Defines for handling compressed domain names */
@@ -222,18 +222,18 @@ struct rrec
 #ifdef	__alpha
     u_int       r_ttl;		/* time to live */
 #else
-    u_long      r_ttl;		/* time to live */
+    uint32_t      r_ttl;		/* time to live */
 #endif
     int         r_size;		/* size of data area */
     char       *r_data;		/* pointer to data */
 };
 
-extern u_short _getshort();
+extern uint16_t _getint16();
 
 #ifdef __alpha
-extern u_int _getlong();
+extern u_int _getint32();
 #else
-extern u_long _getlong();
+extern uint32_t _getint32();
 #endif
 
 /*
@@ -266,5 +266,5 @@ extern u_long _getlong();
 	(cp)[2] = (l >>= 8); \
 	(cp)[1] = (l >>= 8); \
 	(cp)[0] = l >> 8; \
-	(cp) += sizeof(u_long); \
+	(cp) += sizeof(uint32_t); \
 }

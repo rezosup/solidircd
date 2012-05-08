@@ -603,7 +603,7 @@ drop_all_hooks(aModule *owner)
         {
             sendto_realops_lev(DEBUG_LEV, "Module cleanup: removing hook [%s]"
                             " for opaque %d", get_texthooktype(hk->hooktype), 
-                            (int) owner);
+                            (long) owner);
 
             hooklist = get_hooklist((enum c_hooktype) hk->hooktype);
 
@@ -624,7 +624,7 @@ bircmodule_add_hook(enum c_hooktype hooktype, void *opaque, void *funcptr)
     if(!(owner = find_module_opaque(opaque)))
     {
         sendto_realops_lev(DEBUG_LEV, "Module tried to add hooktype %d with"
-                         " unknown opaque 0x%x", (int) hooktype, (int) opaque);
+                         " unknown opaque 0x%x", (int) hooktype, (long) opaque);
         return NULL;
     }
 

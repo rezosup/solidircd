@@ -1253,11 +1253,14 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
         ubuf[1] = '\0';
     }
     hash_check_watch(sptr, RPL_LOGON);
-    sendto_serv_butone(cptr, "NICK %s %d %ld %s %s %s %s %lu %lu :%s",
+
+	// Force cast to uint32_t ; otherwise, potential problems on 64bits systems
+	uint32_t sent_ip = (uint32_t) htonl( (uint32_t) sptr->ip.s_addr);
+    sendto_serv_butone(cptr, "NICK %s %d %ld %s %s %s %s %lu %u :%s",
                                nick, sptr->hopcount + 1, sptr->tsinfo, ubuf,
                                user->username, user->host, user->server, 
                                sptr->user->servicestamp,
-                               htonl(sptr->ip.s_addr), sptr->info);
+                               sent_ip, sptr->info);
    
     if(MyClient(sptr))
     {
@@ -1889,8 +1892,15 @@ if IsShunned(sptr) {
                                            parv[2]);
             }
             else
-                sendto_channel_butone(cptr, sptr, chptr, ":%s %s %s :%s",
-                                      parv[0], cmd, target, parv[2]);
+			{
+				if (parv[2] == NULL) {
+					sendto_channel_butone(cptr, sptr, chptr, ":%s %s %s:",
+							parv[0], cmd, target);
+				} else {
+	                sendto_channel_butone(cptr, sptr, chptr, ":%s %s %s :%s",
+		                                  parv[0], cmd, target, parv[2]);
+				}
+			}
 
             /* next target */
             continue;

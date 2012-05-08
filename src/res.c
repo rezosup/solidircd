@@ -20,7 +20,7 @@
 #include <sys/time.h>
 #include <sys/socket.h>
 #include "nameser.h"
-#include "resolv.h"
+#include <resolv.h>
 #include "inet.h"
 
 /* ALLOW_CACHE_NAMES
@@ -691,6 +691,27 @@ static inline char *is_acceptable_answer(char *h)
 static char dhostbuf[HOSTLEN + 1];
 #endif
 
+/* helper functions, copied from src/res_comp.c*/
+uint16_t _getint16(char *msgp) {
+    char *p = (char *) msgp;
+	uint16_t u;
+    u = *p++ << 8;
+    return ((uint16_t) (u | *p));
+}
+
+uint32_t _getint32(char *msgp) {
+    char *p = (char *) msgp;
+    uint32_t u;
+
+    u = *p++;
+    u <<= 8;
+    u |= *p++;
+    u <<= 8;
+    u |= *p++;
+    u <<= 8;
+    return (u | *p);
+}
+
 /* process name server reply. */
 static int proc_answer(ResRQ * rptr, HEADER *hptr, char *buf, char *eob)
 {
@@ -737,10 +758,10 @@ static int proc_answer(ResRQ * rptr, HEADER *hptr, char *buf, char *eob)
 
 	hostbuf[HOSTLEN] = '\0';
 	cp += n;
-	type = (int) _getshort(cp);
-	cp += sizeof(short);
-	class = (int) _getshort(cp);
-	cp += sizeof(short);
+	type = (int) _getint16(cp);
+	cp += sizeof(uint16_t);
+	class = (int) _getint16(cp);
+	cp += sizeof(uint16_t);
 	if(class != C_IN)
 	{
 	    sendto_realops_lev(DEBUG_LEV,
@@ -767,8 +788,8 @@ static int proc_answer(ResRQ * rptr, HEADER *hptr, char *buf, char *eob)
 	    
 	    ipp = (u_char *) &rptr->addr.s_addr;
 	    ircsprintf(tmphost, "%u.%u.%u.%u.in-addr.arpa",
-		       (u_int) (ipp[3]), (u_int) (ipp[2]),
-		       (u_int) (ipp[1]), (u_int) (ipp[0]));  
+		       (uint32_t) (ipp[3]), (uint32_t) (ipp[2]),
+		       (uint32_t) (ipp[1]), (uint32_t) (ipp[0]));  
 	}
 	else
 	{
@@ -800,16 +821,16 @@ static int proc_answer(ResRQ * rptr, HEADER *hptr, char *buf, char *eob)
 	if (n <= 0)
 	    break;
 	cp += n;
-	type = (int) _getshort(cp);
-	cp += sizeof(short);
+	type = (int) _getint16(cp);
+	cp += sizeof(uint16_t);
 	
-	class = (int) _getshort(cp);
-	cp += sizeof(short);
+	class = (int) _getint16(cp);
+	cp += sizeof(uint16_t);
 	
-	rptr->ttl = _getlong(cp);
-	cp += sizeof(rptr->ttl);
-	dlen = (int) _getshort(cp);
-	cp += sizeof(short);
+	rptr->ttl = _getint32(cp);
+	cp += sizeof(uint32_t);
+	dlen = (int) _getint16(cp);
+	cp += sizeof(uint16_t);
 	
 	/* Wait to set rptr->type until we verify this structure */
 
@@ -1439,7 +1460,7 @@ static unsigned int hash_id(unsigned int id)
 
 static unsigned int hash_cp(char *cp)
 {
-   return ((unsigned int) cp) % ARES_IDCACSIZE;
+   return (unsigned int) (((unsigned long) cp) % ARES_IDCACSIZE);
 }
 
 /* Add a new cache item to the queue and hash table. */

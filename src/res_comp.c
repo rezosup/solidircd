@@ -20,7 +20,7 @@
 
 /* $Id$ */
 
-#include <sys/types.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "nameser.h"
 
@@ -285,25 +285,25 @@ int staticdn_find(u_char *exp_dn, u_char *msg, u_char **dnptrs,
  * used by sendmail.
  */
 
-u_short _getshort(u_char *msgp)
+uint16_t _getint16(u_char *msgp)
 {
     u_char *p = (u_char *) msgp;
 
 #ifdef vax
     /* vax compiler doesn't put shorts in registers */
-    u_long u;
+    uint32_t u;
 #else
-    u_short u;
+    uint16_t u;
 #endif
 
     u = *p++ << 8;
-    return ((u_short) (u | *p));
+    return ((uint16_t) (u | *p));
 }
 
-u_long _getlong(u_char *msgp)
+uint32_t _getint32(u_char *msgp)
 {
     u_char *p = (u_char *) msgp;
-    u_long u;
+    uint32_t u;
 
     u = *p++;
     u <<= 8;
@@ -314,14 +314,14 @@ u_long _getlong(u_char *msgp)
     return (u | *p);
 }
 
-int putshort(u_short s, u_char *msgp)
+int putint16(uint16_t s, u_char *msgp)
 {
 
     msgp[1] = s;
     msgp[0] = s >> 8;
 }
 
-int putlong(u_long l, u_char *msgp)
+int putint32(uint32_t l, u_char *msgp)
 {
     msgp[3] = l;
     msgp[2] = (l >>= 8);

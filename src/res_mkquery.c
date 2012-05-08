@@ -21,7 +21,7 @@
 /* $Id$ */
 
 #include <stdio.h>
-#include <sys/types.h>
+#include <stdint.h>
 #include <netinet/in.h>
 #include "config.h"
 #include "sys.h"
@@ -69,11 +69,11 @@ int res_mkquery(int op, char *dname, int class, int type, char *data,
 	    return (-1);
 	cp += n;
 	buflen -= n;
-	putshort(type, cp);
-	cp += sizeof(u_short);
+	putint16(type, cp);
+	cp += sizeof(uint16_t);
 	
-	putshort(class, cp);
-	cp += sizeof(u_short);
+	putint16(class, cp);
+	cp += sizeof(uint16_t);
 
 	hp->qdcount = htons(1);
 	if (op == QUERY || data == NULL)
@@ -84,17 +84,17 @@ int res_mkquery(int op, char *dname, int class, int type, char *data,
 	    return (-1);
 	cp += n;
 	buflen -= n;
-	putshort(T_NULL, cp);
-	cp += sizeof(u_short);
+	putint16(T_NULL, cp);
+	cp += sizeof(uint16_t);
 	
-	putshort(class, cp);
-	cp += sizeof(u_short);
+	putint16(class, cp);
+	cp += sizeof(uint16_t);
 
-	putlong(0, cp);
-	cp += sizeof(u_long);
+	putint32(0, cp);
+	cp += sizeof(uint32_t);
 
-	putshort(0, cp);
-	cp += sizeof(u_short);
+	putint16(0, cp);
+	cp += sizeof(uint16_t);
 
 	hp->arcount = htons(1);
 	break;
@@ -104,17 +104,17 @@ int res_mkquery(int op, char *dname, int class, int type, char *data,
 	if (buflen < 1 + RRFIXEDSZ + datalen)
 	    return (-1);
 	*cp++ = '\0';		/* no domain name */
-	putshort(type, cp);
-	cp += sizeof(u_short);
+	putint16(type, cp);
+	cp += sizeof(uint16_t);
 	
-	putshort(class, cp);
-	cp += sizeof(u_short);
+	putint16(class, cp);
+	cp += sizeof(uint16_t);
 
-	putlong(0, cp);
-	cp += sizeof(u_long);
+	putint32(0, cp);
+	cp += sizeof(uint32_t);
 
-	putshort(datalen, cp);
-	cp += sizeof(u_short);
+	putint16(datalen, cp);
+	cp += sizeof(uint16_t);
 
 	if (datalen)
 	{
@@ -145,17 +145,17 @@ int res_mkquery(int op, char *dname, int class, int type, char *data,
 	if ((n = dn_comp(dname, cp, buflen, dnptrs, lastdnptr)) < 0)
 	    return (-1);
 	cp += n;
-	putshort(type, cp);
-	cp += sizeof(u_short);
+	putint16(type, cp);
+	cp += sizeof(uint16_t);
 
-	putshort(class, cp);
-	cp += sizeof(u_short);
+	putint16(class, cp);
+	cp += sizeof(uint16_t);
 
-	putlong(0, cp);
-	cp += sizeof(u_long);
+	putint32(0, cp);
+	cp += sizeof(uint32_t);
 
-	putshort(datalen, cp);
-	cp += sizeof(u_short);
+	putint16(datalen, cp);
+	cp += sizeof(uint16_t);
 
 	if (datalen)
 	{
@@ -174,17 +174,17 @@ int res_mkquery(int op, char *dname, int class, int type, char *data,
 	if ((n = dn_comp(dname, cp, buflen, dnptrs, lastdnptr)) < 0)
 	    return (-1);
 	cp += n;
-	putshort(newrr->r_type, cp);
-	cp += sizeof(u_short);
+	putint16(newrr->r_type, cp);
+	cp += sizeof(uint16_t);
 
-	putshort(newrr->r_class, cp);
-	cp += sizeof(u_short);
+	putint16(newrr->r_class, cp);
+	cp += sizeof(uint16_t);
 
-	putlong(0, cp);
-	cp += sizeof(u_long);
+	putint32(0, cp);
+	cp += sizeof(uint32_t);
 
-	putshort(newrr->r_size, cp);
-	cp += sizeof(u_short);
+	putint16(newrr->r_size, cp);
+	cp += sizeof(uint16_t);
 
 	if (newrr->r_size)
 	{

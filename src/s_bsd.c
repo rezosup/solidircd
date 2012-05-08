@@ -52,7 +52,7 @@
 #else
 #include "nameser.h"
 #endif
-#include "resolv.h"
+#include <resolv.h>
 #include "memcount.h"
 
 /* If FD_ZERO isn't define up to this point,
