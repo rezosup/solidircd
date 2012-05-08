@@ -688,6 +688,7 @@ jmp_including:
                 if (!*tok)
                 {
                     confparse_error("Bad include filename", lnum);
+					fclose(file);
                     return -1;
                 }
 
@@ -696,6 +697,7 @@ jmp_including:
                 {
                     current_file = filename;
                     confparse_error("while processing include directive",lnum);
+					fclose(file);
                     return -1;
                 }
 
@@ -711,6 +713,7 @@ jmp_including:
                 if (*cur != ';')
                 {
                     confparse_error("Missing semicolon", lnum);
+					fclose(file);
                     return -1;
                 }
                 including = 0;
@@ -737,6 +740,7 @@ jmp_including:
                 if(clear)
                 {
                     confparse_error("Unexpected opening bracket", lnum);
+					fclose(file);
                     return -1;
                 }
                 including++;
@@ -752,6 +756,7 @@ jmp_including:
             if(!block->tok)
             {
                 confparse_error("Unknown block type", lnum);
+				fclose(file);
                 return -1;
             }
             blnum = lnum;
@@ -764,10 +769,12 @@ jmp_including:
         else
         {
             confparse_error("Junk after block name", lnum);
+			fclose(file);
             return -1;
         }
         if((cur = parse_block(block, cur, file, &lnum)) == NULL)
         {
+			fclose(file);
             return -1;
         }
         clear = 0;
@@ -777,8 +784,10 @@ jmp_including:
     if(clear)
     {
         confparse_error("Unexpected EOF:  Syntax error", blnum);
+		fclose(file);
         return -1;
     }
+	fclose(file);
     return 1;
 }
 
