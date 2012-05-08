@@ -1,0 +1,36 @@
+Introduction
+----------------------
+solid-ircd 3.4.7  is an Internet Relay Chat Daemon based on bahamut 1.8.4
+developed by the bahamut team. Our main goal is to provide users with a stable server, 
+and at the same time, a more secure server, while having all the features of bahamut. 
+
+
+
+Installation 
+------------------------
+
+Read INSTALL
+
+
+Services that support solid-ircd
+------------------------
+
+Anope (http://www.anope.org)
+Atheme (http://www.atheme.org)
+Sirv   (http://www.sirv.net)
+Denora (http://denora.nomadirc.net)
+
+
+Note
+-----------------
+
+If you're upgrading from solid-ircd 3.4.6 or below, then you will need to review template.conf 
+in docs/template.conf lots of changes have been made.
+
+There are some settings in include/config.h that you can enable/disabled if anything is changed it
+will require for the ircd to be recompiled and restarded.
+
+*** IMPORTANT ***
+Please send any SECURITY RELATED bugs to sheik@solid-ircd.com - any 
+non-critical bugs can be submitted to our bug tracker at http://www.solid-ircd.com
+for code discussion.

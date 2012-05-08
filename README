@@ -1,36 +1,65 @@
-Introduction
-----------------------
-solid-ircd 3.4.7  is an Internet Relay Chat Daemon based on bahamut 1.8.4
-developed by the bahamut team. Our main goal is to provide users with a stable server, 
-and at the same time, a more secure server, while having all the features of bahamut. 
+==========================================
+Installation de Solid-IRCd pour RezoSup v2
+==========================================
 
+README v1.7
 
+Outils devant être pré-installés sur le système d'exploitation
+--------------------------------------------------------------
 
-Installation 
+- perl
+- libgmp (sous BSD, installer la librairie mathématique libgmp4)
+
+Procédure d'installation
 ------------------------
 
-Read INSTALL
+- Créer le répertoire d'installation du serveur (exemple) ::
 
+  $ mkdir /usr/local/ircd
 
-Services that support solid-ircd
+- Décompresser l'archive de Solid-IRCd ::
+
+  $ tar zxvf solidircd-stable3.4.8.tar.gz
+
+- Patcher Solid-IRCd avec le patch RezoSup ::
+
+  $ patch -p0 < patch-rz-2e-cho7.patch
+
+- Copier le script de configuration dans le répertoire de Solid-IRCd ::
+
+  $ cp config-rz-2e.pl solidircd-stable/
+
+- Lancer le script de configuration de RezoSup v2 ::
+
+  $ cd solidircd-stable/
+  $ ./config-rz-2e.pl
+
+/!\ dans les options de configuration, taper : --prefix=/usr/local/ircd
+   (il s'agit du répertoire d'installation créé plus haut)
+/!\ pour le cgiirc, éviter les caractères comme / ( ou ) dans le mot de
+    passe (problèmes possibles avec les expressions régulières)
+
+- Compiler et installer ::
+
+  $ make install
+
+Configuration du serveur
 ------------------------
 
-Anope (http://www.anope.org)
-Atheme (http://www.atheme.org)
-Sirv   (http://www.sirv.net)
-Denora (http://denora.nomadirc.net)
+- Générer la configuration de votre serveur à l'adresse :
+  http://www.inp-net.eu.org/rezosup/genconf.php
 
+- Copier le fichier de configuration dans le répertoire d'installation
+  avec le nom "ircd.conf"
 
-Note
------------------
+- Vérifier qu'il y a bien defender.rezosup.net dans le bloc super en plus
+  de services.rezosup.net. Vérifier aussi qu'il y a bien un bloc restrict
+  pour le nick defender
 
-If you're upgrading from solid-ircd 3.4.6 or below, then you will need to review template.conf 
-in docs/template.conf lots of changes have been made.
+- Copier le fichier template du MOTD "ircd.motd" dans le répertoire
+  d'installation, l'éditer et modifier ce qui se trouve entre crochets.
 
-There are some settings in include/config.h that you can enable/disabled if anything is changed it
-will require for the ircd to be recompiled and restarded.
+- Lancer le serveur avec un utilisateur non privilégié ::
 
-*** IMPORTANT ***
-Please send any SECURITY RELATED bugs to sheik@solid-ircd.com - any 
-non-critical bugs can be submitted to our bug tracker at http://www.solid-ircd.com
-for code discussion.
+  $ cd /usr/local/ircd (répertoire d'installation)
+  $ ./ircd
