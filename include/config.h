@@ -1060,9 +1060,9 @@
 #define IRCD_PIDFILE PPATH
 
 /* enforce a minimum, even though it'll probably break at runtime */
-#if (MAXCONNECTIONS < 20)
+#if (MAXCONNECTIONS < 100)
 # undef MAXCONNECTIONS
-# define MAXCONNECTIONS 20
+# define MAXCONNECTIONS 100
 #endif
 
 #if (MAXCONNECTIONS > 1000)
