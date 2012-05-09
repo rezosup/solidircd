@@ -867,6 +867,14 @@ confadd_connect(cVar *vars[], int lnum)
         free_connect(x);
         return -1;
     }
+#ifndef HAVE_SSL
+    if(x->flags & CONN_DKEY)
+    {
+        confparse_error("Requesting SSL exchanges with another server, but no SSL compiled in.", lnum);
+        free_connect(x);
+        return -1;
+    }
+#endif
     x->next = new_connects;
     new_connects = x;
     return lnum;
@@ -1266,6 +1274,11 @@ confadd_port(cVar *vars[], int lnum)
             }
         }
 #endif
+        else
+        {
+            confparse_error("Unknown token in configuration", lnum);
+            return -1;
+        }
 
 
     }
@@ -1660,9 +1673,9 @@ confadd_restrict(cVar *vars[], int lnum)
     return lnum;
 }
 
-
 int confadd_ssl(cVar *vars[], int lnum)
 {
+#ifdef HAVE_SSL
     cVar *tmp;
     int c = 0;
 
@@ -1688,7 +1701,7 @@ int confadd_ssl(cVar *vars[], int lnum)
             new_confopts |= FLAGS_LETUMODE_z;
         }
     }
-
+#endif
     return lnum;
 }
 

@@ -385,7 +385,7 @@ static void make_hostmask(aClient *sptr)
 	char *s, *ip, *dot;
 	int i,isdns=0;
 	uLong sum;
-	memset(mask, 0, 128);
+	memset(mask, 0, HOSTLEN);
 	s  = sptr->sockhost;
 	ip = sptr->hostip;
 	sum = Maskchecksum(ip, strlen(ip));
