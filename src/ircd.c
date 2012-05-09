@@ -128,6 +128,7 @@ extern int      klinestore_init(int);    /* defined in klines.c */
 
 char        **myargv;
 char        configfile[PATH_MAX] = {0};     /* Server configuration file */
+char        runpath[PATH_MAX] = {0};        /* Server run path */
 
 int         debuglevel = -1;       /* Server debug level */
 int         bootopt = 0;           /* Server boot option flags */
@@ -200,7 +201,7 @@ void s_die()
 #ifdef  USE_SYSLOG
     (void) syslog(LOG_CRIT, "Server killed By SIGTERM");
 #endif
-    ircsprintf(tmp, RUN_PATH"/.maxclients");
+    ircsprintf(tmp, "%s/.maxclients", runpath);
     fp=fopen(tmp, "w");
     if(fp!=NULL) 
     {
@@ -704,6 +705,8 @@ main(int argc, char *argv[])
     Count.month = NOW;
     Count.year = NOW;
 
+    strcpy(runpath, RUN_PATH);
+
     /*
      * this code by mika@cs.caltech.edu 
      * it is intended to keep the ircd from being swapped out. BSD
@@ -769,6 +772,12 @@ main(int argc, char *argv[])
         case 'v':
             (void) printf("%s\n", version);
             exit(0);
+#ifdef CMDLINE_RUNPATH
+        case 'r':
+            // RUN_PATH overriding
+            strcpy(runpath, p);
+            break;
+#endif
         case 'x':
 #ifdef  DEBUGMODE
             (void) setuid((uid_t) uid);
@@ -789,15 +798,15 @@ main(int argc, char *argv[])
     get_paths(myargv[0]);
 
 
-    if(chdir(RUN_PATH))
+    if(chdir(runpath))
     {
-        printf("Error changing directory to running dir\n");
+        printf("Error changing directory to running dir %s\n", runpath);
         printf("Server not started\n");
         exit(0);
     }
 
 
-    ircsprintf(tmp, RUN_PATH"/.maxclients");
+    ircsprintf(tmp, "%s/.maxclients", runpath);
     mcsfp = fopen(tmp, "r");
     if(mcsfp != NULL)
     {
@@ -820,7 +829,7 @@ main(int argc, char *argv[])
 
 #ifdef HAVE_ENCRYPTION_ON
     printf("Initializing Encryption...");
-    if(dh_init() == -1)
+    if(dh_init(runpath) == -1)
     {
         printf("\n\nEncryption Init failed!\n\n");
         return 0;

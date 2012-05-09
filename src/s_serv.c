@@ -1000,7 +1000,7 @@ int send_lusers(aClient *cptr, aClient *sptr, int parc, char *parv[])
         char tmp[PATH_MAX];
         
         last_stat_save = timeofday;
-        ircsprintf(tmp, RUN_PATH"/.maxclients");
+        ircsprintf(tmp, "%s/.maxclients", runpath);
         fp = fopen(tmp, "w");
         if (fp != NULL)
         {

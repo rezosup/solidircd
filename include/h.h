@@ -229,7 +229,7 @@ extern u_long 	 hide_memreport(aClient *);
 extern u_long 	 parse_memreport(aClient *);
 extern u_long 	 s_bsd_memreport(aClient *);
 
-extern char 	 *debugmode, configfile[], *sbrk0;
+extern char 	 *debugmode, configfile[], runpath[], *sbrk0;
 extern char 	 *klinefile;
 extern char  	 *zlinefile;
 extern char 	 *getfield(char *);

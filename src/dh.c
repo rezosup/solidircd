@@ -39,6 +39,8 @@
 
 #include "memcount.h"
 
+#include "h.h"
+
 #define DH_HEADER
 #include "dh.h"
 
@@ -113,18 +115,18 @@ int dh_hexstr_to_raw(char *string, unsigned char *hexout, int *hexlen)
     return 1;
 }
 
-static inline void entropy_error(void)
+static inline void entropy_error(const char *runpath)
 {
     printf("\nCould not generate entropy from %s:\n%s\n\n",
            RAND_SRC, strerror(errno));
     printf("ircd needs a %d byte random seed.\n", RAND_BYTES);
     printf("You can place a file containing random data called"
-           " .ircd.entropy\nin the " RUN_PATH " directory."
-           " This file must be at least %d bytes\n", RAND_BYTES);
+           " .ircd.entropy\nin the %s directory."
+           " This file must be at least %d bytes\n", runpath, RAND_BYTES);
     printf("long and should be suitably random.\n");
 }
 
-static int make_entropy()
+static int make_entropy(const char *runpath)
 {
     char randbuf[RAND_BYTES * 4];
     FILE *fp;
@@ -138,7 +140,7 @@ static int make_entropy()
     fp = fopen(RAND_SRC, "r");
     if(!fp)
     {
-        entropy_error();
+        entropy_error(runpath);
         return 0;
     }
 
@@ -152,7 +154,7 @@ static int make_entropy()
         {
             if(ferror(fp))
             {
-                entropy_error();
+                entropy_error(runpath);
                 fclose(fp);
                 return 0;
             }
@@ -173,31 +175,37 @@ static int make_entropy()
     printf("Done.\n");
     fclose(fp);
 
-    fp = fopen(RUN_PATH"/.ircd.entropy", "w");
+    char entropy_path[PATH_MAX];
+    ircsprintf(entropy_path, "%s/.ircd.entropy", runpath);
+
+    fp = fopen(entropy_path, "w");
     if(!fp)
     {
-        printf("Could not open "RUN_PATH"/.ircd.entropy for writing: %s\n", 
-                strerror(errno));
+        printf("Could not open %s for writing: %s\n",
+                entropy_path, strerror(errno));
         return 0;
     }
 
     fwrite(randbuf, RAND_BYTES * 4, 1, fp);
     fclose(fp);
 
-    RAND_load_file(RUN_PATH"/.ircd.entropy", -1);
+    RAND_load_file(entropy_path, -1);
 
     return 1;
 }
 
-static int init_random()
+static int init_random(const char *runpath)
 {
     int ret;
     time_t now;
 
-    ret = RAND_load_file(RUN_PATH"/.ircd.entropy", -1);
+    char entropy_path[PATH_MAX];
+    ircsprintf(entropy_path, "%s/.ircd.entropy", runpath);
+
+    ret = RAND_load_file(entropy_path, -1);
     if(ret <= 0)
     {
-        if(!make_entropy())
+        if(!make_entropy(runpath))
             return -1;
     }
     else
@@ -208,7 +216,7 @@ static int init_random()
     /* this is probably not too good, but it saves just writing
        the whole state back to disk with no changes. */
     RAND_seed(&now, 4); 
-    RAND_write_file(RUN_PATH"/.ircd.entropy");
+    RAND_write_file(entropy_path);
 
     return 0;
 }
@@ -233,12 +241,12 @@ static void create_prime()
     BN_set_word(ircd_generator, dh_gen_1024);
 }
 
-int dh_init()
+int dh_init(const char *runpath)
 {
     ERR_load_crypto_strings();
 
     create_prime();
-    if(init_random() == -1)
+    if(init_random(runpath) == -1)
         return -1;
     return 0; 
 }

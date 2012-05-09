@@ -538,6 +538,12 @@
 #define	CMDLINE_CONFIG
 
 /*
+ * CMDLINE_RUNPATH - allow changing the "run path" of the ircd at invocation.
+ */
+
+#define CMDLINE_RUNPATH
+
+/*
  * FAILED_OPER_NOTICE - send a notice to all opers when someone tries
  * to /oper and uses an incorrect password.
  */

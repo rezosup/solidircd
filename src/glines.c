@@ -471,7 +471,7 @@ glinestore_compact(void)
     journalcount = 0;
 
     /* open a compaction file to dump all active glines to */
-    ircsnprintf(buf1, sizeof(buf1), RUN_PATH"/.glines_c");
+    ircsnprintf(buf1, sizeof(buf1), "%s/.glines_c", runpath);
     newfile = open(buf1, O_WRONLY|O_CREAT|O_TRUNC, 0700);
     if (newfile < 0)
     {
@@ -548,7 +548,7 @@ glinestore_init(int noreload)
     char buf1[1024];
     FILE *jf;
 
-    ircsnprintf(journalfilename, sizeof(journalfilename), RUN_PATH"/.glines");
+    ircsnprintf(journalfilename, sizeof(journalfilename), "%s/.glines", runpath);
 
     if (journal >= 0)
     {

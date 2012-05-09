@@ -548,17 +548,20 @@ void write_pidfile()
     int fd;
     char buff[20];
 
-    if ((fd = open(IRCD_PIDFILE, O_CREAT | O_WRONLY, 0600)) >= 0)
+    char pidfile_path[PATH_MAX];
+    ircsprintf(pidfile_path, "%s/ircd.pid", runpath);
+
+    if ((fd = open(pidfile_path, O_CREAT | O_WRONLY, 0600)) >= 0)
     {
         ircsprintf(buff, "%5d\n", (int) getpid());
         if (write(fd, buff, strlen(buff)) == -1)
-            Debug((DEBUG_NOTICE, "Error writing to pid file %s", IRCD_PIDFILE));
+            Debug((DEBUG_NOTICE, "Error writing to pid file %s", pidfile_path));
         close(fd);
         return;
     }
 #ifdef  DEBUGMODE
     else
-        Debug((DEBUG_NOTICE, "Error opening pid file %s", IRCD_PIDFILE));
+        Debug((DEBUG_NOTICE, "Error opening pid file %s", pidfile_path));
 #endif
 #endif
 }

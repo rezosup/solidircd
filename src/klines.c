@@ -462,7 +462,7 @@ klinestore_compact(void)
     journalcount = 0;
 
     /* open a compaction file to dump all active klines to */
-    ircsnprintf(buf1, sizeof(buf1), RUN_PATH"/.klines_c");
+    ircsnprintf(buf1, sizeof(buf1), "%s/.klines_c", runpath);
     newfile = open(buf1, O_WRONLY|O_CREAT|O_TRUNC, 0700);
     if (newfile < 0)
     {
@@ -539,7 +539,7 @@ klinestore_init(int noreload)
     char buf1[1024];
     FILE *jf;
 
-    ircsnprintf(journalfilename, sizeof(journalfilename), RUN_PATH"/.klines");
+    ircsnprintf(journalfilename, sizeof(journalfilename), "%s/.klines", runpath);
 
     if (journal >= 0)
     {
