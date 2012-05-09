@@ -980,7 +980,7 @@ main(int argc, char *argv[])
 
 
 #ifdef DUMP_DEBUG
-    dumpfp=fopen(LOG_PATH"/ircd-dump.log", "w");
+    dumpfp=fopen("ircd-dump.log", "w");
 #endif
 #ifdef USE_SYSLOG
     syslog(LOG_NOTICE, "Server Ready");

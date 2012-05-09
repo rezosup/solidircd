@@ -259,7 +259,6 @@
 #define CONFIG_PATH     "/etc/ircd"
 #define RUN_PATH        "/var/run/ircd"
 #define LIB_PATH        "/usr/share/rezosup-ircd"
-#define LOG_PATH        "/var/log"
 
 #define MPATH           "ircd.motd"
 #define SMPATH          "ircd.smotd"
