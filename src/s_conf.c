@@ -867,6 +867,14 @@ confadd_connect(cVar *vars[], int lnum)
         free_connect(x);
         return -1;
     }
+#ifndef HAVE_SSL
+    if(x->flags & CONN_DKEY)
+    {
+        confparse_error("Requesting SSL exchanges with another server, but no SSL compiled in.", lnum);
+        free_connect(x);
+        return -1;
+    }
+#endif
     x->next = new_connects;
     new_connects = x;
     return lnum;
