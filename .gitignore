@@ -1,3 +1,17 @@
+# Usual files
+.*.swp
+*.o
+*.a
+
+# generated files
+src/ircd
+src/version.c.last
+tools/mkpasswd
+tools/convert_conf
+zlib/example
+zlib/minigzip
+
+# Autotools
 Makefile
 autom4te.cache/
 config.log
@@ -6,3 +20,5 @@ doc/Makefile
 include/setup.h
 src/Makefile
 tools/Makefile
+zlib/Makefile
+zlib/zconf.h
