@@ -632,9 +632,18 @@ static int bad_command()
 #ifdef CMDLINE_CONFIG
     printf("[-f configfile] ");
 #endif
+#ifdef CMDLINE_RUNPATH
+    printf("[-r runpath] ");
+#endif
     printf("[-t] [-v]\n");
     printf("-t will cause ircd not to fork (mostly for debugging)\n");
     printf("-v will cause ircd to print its version and quit\n");
+#ifdef CMDLINE_CONFIG
+    printf("-f CONFIGFILE will load the given config file\n");
+#endif
+#ifdef CMDLINE_RUNPATH
+    printf("-r RUNPATH will use RUNPATH as a working dir (pidfile, entropy, ...)\n");
+#endif
     printf("Server Not Started\n");
     return (-1);
 }
