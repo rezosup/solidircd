@@ -1274,6 +1274,11 @@ confadd_port(cVar *vars[], int lnum)
             }
         }
 #endif
+        else
+        {
+            confparse_error("Unknown token in configuration", lnum);
+            return -1;
+        }
 
 
     }
