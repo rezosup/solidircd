@@ -890,10 +890,19 @@ main(int argc, char *argv[])
     }
     merge_confs();
     build_rplcache();
-    read_motd(MOTD);
-    read_help(HELPFILE);
-    if(confopts & FLAGS_SMOTD)
-        read_shortmotd(SHORTMOTD);
+
+    // Read MOTD
+    ircsprintf(tmp, "%s/"MOTD, dpath);
+    read_motd(tmp);
+
+    // Read HELPFILE (opers.txt)
+    ircsprintf(tmp, "%s/"HELPFILE, dpath);
+    read_help(tmp);
+
+    if(confopts & FLAGS_SMOTD) {
+        ircsprintf(tmp, "%s/"SHORTMOTD, dpath);
+        read_shortmotd(tmp);
+    }
     printf("Configuration Loaded.\n");
 
     init_fdlist(&default_fdlist);

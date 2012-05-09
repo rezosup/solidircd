@@ -549,7 +549,7 @@ void write_pidfile()
     char buff[20];
 
     char pidfile_path[PATH_MAX];
-    ircsprintf(pidfile_path, "%s/ircd.pid", runpath);
+    ircsprintf(pidfile_path, "%s/"IRCD_PIDFILE, runpath);
 
     if ((fd = open(pidfile_path, O_CREAT | O_WRONLY, 0600)) >= 0)
     {

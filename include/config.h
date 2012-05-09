@@ -260,10 +260,11 @@
 #define RUN_PATH        "/var/run/ircd"
 #define LIB_PATH        "/usr/share/rezosup-ircd"
 #define LOG_PATH        "/var/log"
-#define MPATH            CONFIG_PATH"/ircd.motd"
-#define SMPATH           CONFIG_PATH"/ircd.smotd"
-#define LPATH            LOG_PATH"/ircd.log"
-#define HPATH            CONFIG_PATH"/opers.txt"
+
+#define MPATH           "ircd.motd"
+#define SMPATH          "ircd.smotd"
+#define LPATH           "ircd.log"
+#define HPATH           "opers.txt"
 #define PPATH           "ircd.pid"
 
 

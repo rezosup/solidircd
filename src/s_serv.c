@@ -2542,9 +2542,14 @@ m_rehash(aClient *cptr, aClient *sptr, int parc, char *parv[])
         else if (mycmp(parv[1], "MOTD") == 0) 
         {
             sendto_ops("%s is forcing re-reading of MOTD file", parv[0]);
-            read_motd(MOTD);
-        if(confopts & FLAGS_SMOTD)
-                read_shortmotd(SHORTMOTD);
+            char motd_path[PATH_MAX];
+            ircsprintf(motd_path, "%s/"MOTD, dpath);
+            read_motd(motd_path);
+
+            if(confopts & FLAGS_SMOTD) {
+                ircsprintf(motd_path, "%s/"SHORTMOTD, dpath);
+                read_shortmotd(motd_path);
+            }
             return (0);
         }
         else if(mycmp(parv[1], "AKILLS") == 0) 
