@@ -1673,9 +1673,9 @@ confadd_restrict(cVar *vars[], int lnum)
     return lnum;
 }
 
-
 int confadd_ssl(cVar *vars[], int lnum)
 {
+#ifdef HAVE_SSL
     cVar *tmp;
     int c = 0;
 
@@ -1692,7 +1692,7 @@ int confadd_ssl(cVar *vars[], int lnum)
             new_confopts |= FLAGS_LETUMODE_z;
         }
     }
-
+#endif
     return lnum;
 }
 
