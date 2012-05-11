@@ -539,10 +539,6 @@ if test "$engine" = "select" && test "$broken_fd_setsize" != "yes"; then
     CFLAGS="$CFLAGS -DFD_SETSIZE=$maxconnections"
 fi
 
-if test $prefix = NONE; then
-    prefix=${HOME}/ircd
-fi
-
 AC_DEFUN([TYPE_SOCKLEN_T],
 [AC_CACHE_CHECK([for socklen_t], ac_cv_type_socklen_t,
 [
@@ -561,13 +557,10 @@ AC_DEFUN([TYPE_SOCKLEN_T],
 TYPE_SOCKLEN_T
 
 
-INSTALL_DIR="${prefix}"
-
 AC_SUBST(SSL_INCLUDES)
 AC_SUBST(SSL_LIBS)
 AC_SUBST(LIBS)
 AC_SUBST(SENGINE)
-AC_SUBST(INSTALL_DIR)
 
 AC_OUTPUT(Makefile src/Makefile tools/Makefile doc/Makefile)
 
@@ -587,4 +580,7 @@ echo "      SSL Connections:                $ssl_connections"
 echo "      Loadable Modules:               $set_hmodules"
 echo "      Maximum Connections:            $maxconnections"
 echo "      Install Directory:              $prefix"
+echo "      System Config Directory:        $sysconfdir"
+echo "      Binaries Directory:             $bindir"
+echo "      Documentation Directory:        $docdir"
 echo ""

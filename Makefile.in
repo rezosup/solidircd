@@ -31,7 +31,7 @@ CC=@CC@
 CFLAGS=@CFLAGS@
 LIBS=@LIBS@ 
 
-INSTALL_DIR=@INSTALL_DIR@
+INSTALL_DIR=$(DESTDIR)@sysconfdir@/ircd
 
 all:	build
 
@@ -95,13 +95,14 @@ depend:
 install: all
 	@if test ! -d $(INSTALL_DIR); then \
 		echo "Creating directory $(INSTALL_DIR)"; \
-		mkdir $(INSTALL_DIR); \
+		mkdir -p $(INSTALL_DIR); \
 	fi
 	@for i in $(INSTDIRS); do \
 		$(MAKE) -C $$i install; \
 	done
 	@echo ""
 	cp -Ri  ssl $(INSTALL_DIR)
+	cp doc/template.conf $(INSTALL_DIR)
 	@echo "Now edit $(INSTALL_DIR)/template.conf"
 	@echo "and move it to ircd.conf - and you'll be all set."
 	@echo "See the doc/ directory and the INSTALL file for more assistance"

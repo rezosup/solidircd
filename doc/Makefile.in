@@ -22,7 +22,7 @@ MV=@MV@
 
 INSTALL=@INSTALL@
 INSTALL_DATA=@INSTALL_DATA@
-INSTALL_DIR=@INSTALL_DIR@
+INSTALL_DIR=$(DESTDIR)@docdir@
 
 FILES=opers.txt reference.conf template.conf rehash
 
@@ -33,6 +33,7 @@ build:
 clean:
 
 install: all
+	mkdir -p $(INSTALL_DIR)
 	@for i in $(FILES); do \
 		if test -f $(INSTALL_DIR)/$$i; then \
 			echo $(MV) $(INSTALL_DIR)/$$i $(INSTALL_DIR)/$$i.old; \

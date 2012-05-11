@@ -4,7 +4,7 @@ MV=@MV@
 IRCDLIBS=@LIBS@
 INSTALL=@INSTALL@
 INSTALL_BIN=@INSTALL_PROGRAM@
-INSTALL_DIR=@INSTALL_DIR@
+INSTALL_DIR=$(DESTDIR)@libexecdir@
 INCLUDEDIR=-I../include
 
 mkpasswd_SOURCES = mkpasswd.c
@@ -35,6 +35,7 @@ distclean: clean
 	$(CC) $(CFLAGS) $(INCLUDEDIR) -c $<
 
 install:
+	mkdir -p $(INSTALL_DIR)
 	@for i in $(PROGRAMS); do \
 		if test -f $(INSTALL_DIR)/$$i; then \
 			echo $(MV) $(INSTALL_DIR)/$$i $(INSTALL_DIR)/$$i.old; \
