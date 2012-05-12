@@ -103,9 +103,10 @@ install: all
 	@echo ""
 	cp -Ri ssl $(INSTALL_DIR)
 	chmod +x ssl/makecert.sh
-	cp doc/template.conf $(INSTALL_DIR)
-	@echo "Now edit $(INSTALL_DIR)/template.conf"
-	@echo "and move it to ircd.conf - and you'll be all set."
+	cp doc/template.conf $(INSTALL_DIR)/ircd.conf.default
+	cp doc/template.conf $(INSTALL_DIR)/ircd.conf
+	cp doc/opers.txt $(INSTALL_DIR)/
+	@echo "Now edit $(INSTALL_DIR)/ircd.conf"
 	@echo "See the doc/ directory and the INSTALL file for more assistance"
 	@echo "Thank you for choosing solid-ircd!"
 	@echo ""
