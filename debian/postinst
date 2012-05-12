@@ -14,9 +14,6 @@ case "$1" in
 	# Create directories for log etc
 	# install also fixes permissions.
 	install -d -oircd -gircd -m750 /var/run/ircd
-
-        # Install runlevel files.
-        update-rc.d rezosup-solidircd defaults
 	;;
 esac
 
