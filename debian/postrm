@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+. /usr/share/debconf/confmodule
+
+if [ "$1" = purge ]; then
+  update-rc.d rezosup-solidircd remove
+fi
+
+#DEBHELPER#

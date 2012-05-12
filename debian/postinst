@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+. /usr/share/debconf/confmodule
+
+case "$1" in
+  configure)
+
+	if ! getent passwd ircd > /dev/null ; then
+	  echo 'Adding system-user for rezosup-ircd' 1>&2
+	  adduser --system --group --quiet --home /var/run/ircd \
+	    --no-create-home --disabled-login ircd
+	fi
+	# Create directories for log etc
+	# install also fixes permissions.
+	install -d -oircd -gircd -m750 /var/run/ircd
+
+        # Install runlevel files.
+        update-rc.d rezosup-solidircd defaults
+	;;
+esac
+
+#DEBHELPER#

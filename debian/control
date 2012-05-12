@@ -8,6 +8,6 @@ Homepage: http://www.rezosup.net/
 
 Package: rezosup-solidircd
 Architecture: i386 amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: adduser, ${shlibs:Depends}, ${misc:Depends}
 Description: Rezosup IRCd
  solid-ircd with patches, the ircd running on the RezoSup irc network.

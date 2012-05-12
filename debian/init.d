@@ -1,8 +1,8 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          rezosup-solidircd
-# Required-Start:    $network $local_fs
-# Required-Stop:
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop:     $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: rezosup-solidircd
@@ -15,8 +15,8 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC=Rezosup IRC daemon
 NAME=rezosup-solidircd
-DAEMON=/usr/bin/rezosup-solidircd
-DAEMON_ARGS="-r /var/run/ircd"
+DAEMON=/usr/sbin/ircd
+DAEMON_ARGS="-f /etc/ircd/ircd.conf -r /var/run/ircd"
 SCRIPTNAME=/etc/init.d/$NAME
 PIDFILE=/var/run/ircd/ircd.pid
 
@@ -42,9 +42,9 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --user ircd --exec $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --chuid ircd:ircd --exec $DAEMON -- \
 		$DAEMON_ARGS \
 		|| return 2
 	# Add code here, if necessary, that waits for the process to be ready
@@ -62,7 +62,7 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --exec $DAEMON
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 	# Wait for children to finish too if this is a daemon that forks
