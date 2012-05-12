@@ -1,0 +1,11 @@
+convert_conf
+mkpasswd
+debian/rezosup-ircd/usr/lib/rezosup-solidircd/convert_conf
+debian/rezosup-ircd/usr/lib/rezosup-solidircd/mkpasswd
+debian/rezosup-ircd/usr/bin/ircd
+debian/rezosup-ircd/lib/rezosup-solidircd/convert_conf
+debian/rezosup-ircd/lib/rezosup-solidircd/mkpasswd
+debian/rezosup-ircd/etc/ssl/ssl.rnd
+debian/rezosup-ircd/usr/bin/ircd.old
+debian/rezosup-ircd/lib/rezosup-solidircd/convert_conf.old
+debian/rezosup-ircd/lib/rezosup-solidircd/mkpasswd.old
