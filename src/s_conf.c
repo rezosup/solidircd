@@ -1483,6 +1483,11 @@ confadd_class(cVar *vars[], int lnum)
             tmp->type = NULL;
             x->maxsendq = atoi(tmp->value);
         }
+        else if(tmp->type && (tmp->type-> flag == SCONFF_AUTOUMODEV))
+        {
+            tmp->type = NULL;
+            x->flags |= FLAGS_AUTOUMODE_v;
+        }
     }
     if(!x->name)
     {
@@ -2165,6 +2170,7 @@ merge_classes()
             old_class->pingfreq = class->pingfreq;
             old_class->maxlinks = class->maxlinks;
             old_class->maxsendq = class->maxsendq;
+            old_class->flags = class->flags;
             old_class->ip24clones = class->ip24clones;
             class->maxlinks = -1;
         }

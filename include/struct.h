@@ -875,6 +875,7 @@ struct Conf_Class
     int          ip24clones;
     int          links;
     int          refs;
+    int          flags;  /* Extra flags */
     aClass      *next;
 };
 

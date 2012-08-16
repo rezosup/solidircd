@@ -1034,6 +1034,9 @@ register_user(aClient *cptr, aClient *sptr, char *nick, char *username)
     if (MyConnect(sptr))
     {
         set_effective_class(sptr);
+        if(sptr->class->flags & FLAGS_AUTOUMODE_v)
+            SetUmodev(sptr);
+
 #ifdef MAXBUFFERS
         /* Let's try changing the socket options for the client here... */
         reset_sock_opts(sptr->fd, 0);

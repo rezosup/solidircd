@@ -116,8 +116,10 @@ struct ConfVar
 #define SCONFF_MASK                 20
 #define SCONFT_IPMASK   "IPMASK"
 #define SCONFF_IPMASK               21
+#define SCONFT_AUTOUMODEV "AUTO_UMODE_V"
+#define SCONFF_AUTOUMODEV           22
 
-#define SCONFF_STRING               22    /* allow freeform strings */
+#define SCONFF_STRING               23    /* allow freeform strings */
 
 /* subtoken aliases */
 
@@ -297,6 +299,7 @@ sConf confclasstab[] =
     {SCONFT_MAXUSERS, SCONFF_MAXUSERS, VARTYPE_INT},
     {SCONFT_MAXLINKS, SCONFF_MAXUSERS, VARTYPE_INT},
     {SCONFT_MAXSENDQ, SCONFF_MAXSENDQ, VARTYPE_INT},
+    {SCONFT_AUTOUMODEV, SCONFF_AUTOUMODEV, VARTYPE_NONE},
     {(char *) 0, 0, 0}
 };
 
