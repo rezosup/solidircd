@@ -1666,26 +1666,26 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
 #endif
 
         case 'O':
-           if (!IsULine(sptr) && (level<2 || !IsOper(sptr)))
-            {
-                errors |= SM_ERR_NOTOPER;
-                break;
-            } 
-            else if (MyClient(sptr) && !IsOper(sptr))
-            {
-                errors |= SM_ERR_NOTOPER;
-                break;
-            } 
-            else 
-            {
-                if (change=='+')
-                    chptr->mode.mode|=MODE_OPERONLY;
-                else
-                    chptr->mode.mode&=~MODE_OPERONLY;
-                *mbuf++ = *modes;
-                nmodes++;
+            if(!IsULine(sptr)) {
+               if(level<2)
+                {
+                    errors |= SM_ERR_NOPRIVS;
+                    break;
+                }
+               else if(MyClient(sptr) && !IsOper(sptr))
+                {
+                    errors |= SM_ERR_NOTOPER;
+                    break;
+                }
             }
+            if (change=='+')
+                chptr->mode.mode|=MODE_OPERONLY;
+            else
+                chptr->mode.mode&=~MODE_OPERONLY;
+            *mbuf++ = *modes;
+            nmodes++;
             break;
+
           case 'o':
             if (check_level(level,2,chptr,sptr))
             {
@@ -1742,7 +1742,8 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
             }
             break;
         case 'v':
-            if (check_level(level,1,chptr,sptr))
+            who = find_chasing(sptr, parv[args], &chasing);
+            if (check_level(level,1,chptr,sptr) && (change == '+' || who != sptr))
             {
                 errors |= SM_ERR_NOPRIVS;
                 break;
@@ -1759,7 +1760,6 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
                 break;
             }
                         
-            who = find_chasing(sptr, parv[args], &chasing);
             cm = find_user_member(chptr->members, who);
             if(cm == NULL) 
             {
@@ -1791,7 +1791,8 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
             nmodes++;
             break;
 		case 'h':
-            if(check_level(level,2,chptr,sptr)) 
+            who = find_chasing(sptr, parv[args], &chasing);
+            if (check_level(level,2,chptr,sptr) && (change == '+' || who != sptr))
             {
                 errors |= SM_ERR_NOPRIVS;
                 break;
@@ -2354,7 +2355,7 @@ static int set_mode(aClient *cptr, aClient *sptr, aChannel *chptr,
             break;
             
         case 'i':
-             if(check_level(level,2,chptr,sptr)) 
+            if(check_level(level,1,chptr,sptr)) 
             {
                 errors |= SM_ERR_NOPRIVS;
                 break;
@@ -3475,7 +3476,7 @@ int m_kick(aClient *cptr, aClient *sptr, int parc, char *parv[])
                  ":%s NOTICE %s :*** Notice -- %s attempted to kick you, however you are a channel operator",
                  me.name, who->name, sptr->name);  // this will help out paranoid channel operators -Sheik.
   
-                 sendto_one(sptr, ":%s NOTICE %s :*** Notice -- You cant kick %s, due to insufficient privileges",
+                 sendto_one(sptr, ":%s NOTICE %s :*** Notice -- You can't kick %s, due to insufficient privileges",
                  me.name, parv[0], who->name);
                 }
                 else
@@ -3692,7 +3693,7 @@ int m_invite(aClient *cptr, aClient *sptr, int parc, char *parv[])
             return 0;
         }
 
-        if (!is_chan_op(sptr, chptr))
+        if (!is_chan_op(sptr, chptr) && !is_halfop(sptr, chptr))
         {
             sendto_one(sptr, err_str(ERR_CHANOPRIVSNEEDED), me.name, parv[0],
                        chptr->chname);
