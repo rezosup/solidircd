@@ -391,16 +391,18 @@ static int fatal_ssl_error(int ssl_error, int where, aClient *sptr)
 	    ssl_errstr = "Unknown OpenSSL error (huh?)";
     }
 
+    if(errno>0) {
     sendto_realops_lev(DEBUG_LEV, "%s to "
-		"%s!%s@%s aborted with%serror (%s). [%s]", 
+		"%s!%s@%s aborted with error (%s). [%s]", 
 		ssl_func, *sptr->name ? sptr->name : "<unknown>",
 		(sptr->user && sptr->user->username) ? sptr->user->
 		username : "<unregistered>", sptr->sockhost,
-		(errno > 0) ? " " : " no ", errstr, ssl_errstr);
+		errstr, ssl_errstr);
 #ifdef USE_SYSLOG
     syslog(LOG_ERR, "SSL error in %s: %s [%s]", ssl_func, errstr,
 	    ssl_errstr);
 #endif
+    }
 
     /* if we reply() something here, we might just trigger another
      * fatal_ssl_error() call and loop until a stack overflow... 
