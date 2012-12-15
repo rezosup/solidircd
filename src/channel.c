@@ -3470,7 +3470,11 @@ int m_kick(aClient *cptr, aClient *sptr, int parc, char *parv[])
 
             if (IsMember(who, chptr))
             {
-                if (is_only_halfop(sptr, chptr) && (is_chan_op(who,chptr) || is_halfop(who,chptr)))
+                if(!IsULine(sptr) && IsULine(who)) {
+                    sendto_one(sptr, ":%s NOTICE %s :*** Notice -- %s is a service and therefore cannot be kicked. (instead, use /msg botserv unassign %s)",
+                    me.name, parv[0], who->name, chptr->chname);
+                }
+                else if (is_only_halfop(sptr, chptr) && (is_chan_op(who,chptr) || is_halfop(who,chptr)))
                 {
                  sendto_one (who,
                  ":%s NOTICE %s :*** Notice -- %s attempted to kick you, however you are a channel operator",
