@@ -2502,7 +2502,7 @@ static int can_join(aClient *sptr, aChannel *chptr, char *key)
     else if (chptr->mode.mode & MODE_OPERONLY && !IsOper(sptr))
     {
         r = "+O";
-        error = ERR_INVITEONLYCHAN;
+        error = ERR_NOPRIVILEGES;
     }
     else if (chptr->mode.limit && chptr->users >= chptr->mode.limit)
     {
@@ -3093,13 +3093,13 @@ if IsShunned(sptr) {
  * - lucas 
  */
 
-        if (flags && !allow_op)
+        if (!IsOper(sptr) && flags && !allow_op)
             sendto_one(sptr, ":%s NOTICE %s :*** Notice -- Due to a network "
                        "split, you can not obtain channel operator status in "
                        "a new channel at this time.", me.name, sptr->name);
         
         /* Complete user entry to the new channel (if any) */
-        if (allow_op)
+        if (IsOper(sptr) || allow_op)
             add_user_to_channel(chptr, sptr, flags);
         else
             add_user_to_channel(chptr, sptr, 0);
@@ -3112,7 +3112,7 @@ if IsShunned(sptr) {
             /* we keep channel "creations" to the server sjoin format,
                so we can bounce modes and stuff if our ts is older. */
             
-            if (allow_op)
+            if (IsOper(sptr) || allow_op)
                 sendto_serv_butone(cptr, ":%s SJOIN %ld %s + :@%s", me.name,
                                    chptr->channelts, name, parv[0]);
             else
