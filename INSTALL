@@ -17,30 +17,25 @@ Procédure d'installation
 
   $ mkdir /usr/local/ircd
 
-- Décompresser l'archive de Solid-IRCd ::
+- Télécharger l'archive de Solid-IRCd depuis GitHub::
 
-  $ tar zxvf solidircd-stable3.4.8.tar.gz
+  $ git clone git://github.com/rezosup/solidircd.git
 
-- Patcher Solid-IRCd avec le patch RezoSup ::
+- (optionnellement) régénérer le fichier "configure"
 
-  $ patch -p0 < patch-rz-2e-cho7.patch
+  $ autoconf
 
-- Copier le script de configuration dans le répertoire de Solid-IRCd ::
+- Choisir les options de configuration
 
-  $ cp config-rz-2e.pl solidircd-stable/
+  $ ./configure --enable-openssl
 
-- Lancer le script de configuration de RezoSup v2 ::
+  Pour plus d'options (emplacement des fichiers) :
 
-  $ cd solidircd-stable/
-  $ ./config-rz-2e.pl
-
-/!\ dans les options de configuration, taper : --prefix=/usr/local/ircd
-   (il s'agit du répertoire d'installation créé plus haut)
-/!\ pour le cgiirc, éviter les caractères comme / ( ou ) dans le mot de
-    passe (problèmes possibles avec les expressions régulières)
+    $ ./configure --help
 
 - Compiler et installer ::
 
+  $ make -j3
   $ make install
 
 Configuration du serveur
