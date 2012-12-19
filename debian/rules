@@ -14,3 +14,6 @@
 
 override_dh_auto_install:
 	$(MAKE) PACKAGE=rezosup-solidircd DESTDIR=$$(pwd)/debian/rezosup-solidircd sysconfdir=/etc prefix=/usr exec_prefix=/usr install
+
+override_dh_auto_configure:
+	dh_auto_configure -- --enable-openssl
