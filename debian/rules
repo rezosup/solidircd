@@ -10,7 +10,7 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@ --with autotools-dev
+	dh $@ --with autotools-dev,autoreconf
 
 override_dh_auto_install:
 	$(MAKE) PACKAGE=rezosup-solidircd DESTDIR=$$(pwd)/debian/rezosup-solidircd sysconfdir=/etc prefix=/usr exec_prefix=/usr install
