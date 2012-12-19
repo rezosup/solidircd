@@ -6,6 +6,7 @@
 # generated files
 src/ircd
 src/version.c.last
+include/setup.h.in~
 tools/mkpasswd
 tools/convert_conf
 zlib/example
@@ -16,7 +17,6 @@ Makefile
 autom4te.cache/
 config.log
 config.guess
-config.sub
 config.status
 doc/Makefile
 include/setup.h
