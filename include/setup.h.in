@@ -36,10 +36,6 @@
 /* If we support encryption */
 #undef HAVE_ENCRYPTION_ON
 
-
-/* If we support SSL Connections */
-#undef HAVE_SSL
-
 /* Define to 1 if you have the <errno.h> header file. */
 #undef HAVE_ERRNO_H
 
@@ -141,6 +137,9 @@
 
 /* Define to 1 if you have the `socket' function. */
 #undef HAVE_SOCKET
+
+/* SSL support */
+#undef HAVE_SSL
 
 /* Define to 1 if you have the <stddef.h> header file. */
 #undef HAVE_STDDEF_H
@@ -250,6 +249,9 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
@@ -265,6 +267,11 @@
 /* Maxmimum number of iovecs supported by writev() */
 #undef WRITEV_IOV
 
-/* Define as `__inline' if that's what the C compiler calls it, or to nothing
-   if it is not supported. */
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
 #undef inline
+#endif
+
+/* Substitute for socklen_t */
+#undef socklen_t

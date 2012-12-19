@@ -24,6 +24,7 @@ AH_TEMPLATE([MAXCONNECTIONS],[Maximum Connections we allow])
 AH_TEMPLATE([NEED_EPOLL_DEFS],[epoll behavior])
 AH_TEMPLATE([AIX],[AIX support])
 AH_TEMPLATE([WRITEV_IOV],[Maxmimum number of iovecs supported by writev()])
+AH_TEMPLATE([HAVE_SSL],[SSL support])
 
 dnl Put our options of here for ease of reading.
 
