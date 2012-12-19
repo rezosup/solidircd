@@ -1,0 +1,11 @@
+rezosup-solidircd (3.4.8.2i) unstable; urgency=low
+
+  * Fix DEAD_SOCKET issue (bis) 
+
+ -- Raphaël Barrois <xelnor@rezosup.net>  Tue, 18 Dec 2012 23:20:56 +0000
+
+rezosup-solidircd (3.4.8.2e-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Raphaël Barrois <xelnor@rezosup.net>  Tue, 18 Dec 2012 22:36:54 +0000

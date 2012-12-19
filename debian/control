@@ -1,0 +1,13 @@
+Source: rezosup-solidircd
+Section: net
+Priority: extra
+Maintainer: Raphaël Barrois <xelnor@rezosup.net>
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev, dh-autoreconf
+Standards-Version: 3.9.1
+Homepage: http://www.rezosup.net/
+
+Package: rezosup-solidircd
+Architecture: i386 amd64
+Depends: libssl0.9.8, adduser, ${shlibs:Depends}, ${misc:Depends}
+Description: RezoSup IRCd
+ solid-ircd with patches, the ircd running on the RezoSup network.
